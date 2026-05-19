@@ -1,0 +1,28 @@
+.chart-title{
+    display: flex;
+    justify-content: space-between;
+    h2{
+        font-size: .8rem;
+        font-weight: bold;
+    }
+}
+
+.no-data-placeholder {
+  text-align: center;
+  padding: 2rem;
+  color: gray;
+}
+
+.no-data-placeholder img {
+  max-width: 15rem;
+  width: 100%;
+}
+
+@media (max-width: 1200px) {
+  ::ng-deep .legend-label-text {
+    white-space: normal !important;
+    word-break: break-word !important;
+    text-align: left !important;
+  }
+}
+

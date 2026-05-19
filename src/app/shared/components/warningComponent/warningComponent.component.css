@@ -1,0 +1,79 @@
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dialog-content {
+  background: #fff9e6; /* amarillo muy suave */
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  animation: fadeInScale 0.3s ease;
+  border-left: 6px solid #ffbb33; /* naranja suave */
+}
+
+.dialog-content mat-icon {
+  font-size: 48px;
+  margin-bottom: 0.5rem;
+  color: #ffbb33; /* icono naranja suave */
+}
+
+.mat-icon {
+  height: auto;
+  width: auto;
+}
+
+.dialog-content h4 {
+  margin: 0.5rem 0;
+  font-size: 1.4rem;
+  color: #333;
+}
+
+.dialog-content p {
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem; /* espacio entre botones */
+}
+
+.dialog-content button {
+  background-color: #ffbb33; /* naranja suave */
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1.25rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  min-width: 100px;
+}
+
+.dialog-content button:hover {
+  background-color: #e6a523; /* naranja un poco más oscuro */
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

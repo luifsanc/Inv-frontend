@@ -1,0 +1,23 @@
+.scrollable-chart {
+  overflow-x: auto;
+  width: 100%;
+}
+.chart-title{
+    text-align: start;
+    h2{
+        font-size: .8rem;
+        font-weight: bold;
+    }
+}
+
+
+.no-data-placeholder {
+  text-align: center;
+  padding: 2rem;
+  color: gray;
+}
+
+.no-data-placeholder img {
+  max-width: 15rem;
+  width: 100%;
+}

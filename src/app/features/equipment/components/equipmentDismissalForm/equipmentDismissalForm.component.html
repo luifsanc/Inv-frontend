@@ -1,0 +1,54 @@
+<div class="form-wrapper">
+  <div class="form-overlay" *ngIf="isSubmitting || loading">
+    <div class="loading-spinner">
+      <mat-progress-spinner mode="indeterminate" diameter="30"></mat-progress-spinner>
+      <span style="margin-left: 10px" *ngIf="isSubmitting">Guardando...</span>
+      <span style="margin-left: 10px" *ngIf="loading">Cargando...</span>
+    </div>
+  </div>
+
+  <!-- Formulario - Tipo de Baja -->
+  <form [formGroup]="equipmentDismissalTypeForm">
+  <div class="form-field">
+    <label>Tipo de Baja <span class="required-asterisk">*</span></label>
+    <mat-form-field appearance="outline" class="w-100 centered-select">
+      <mat-select formControlName="dismissalType">
+        <!-- Buscar-->
+        <mat-option>
+          <ngx-mat-select-search
+            [formControl]="dismissalTypeFilterCtrl"
+            placeholderLabel="Buscar tipo de baja..."
+            noEntriesFoundLabel="No se encontraron resultados">
+          </ngx-mat-select-search>
+        </mat-option>
+        <!-- Opciones filtradas -->
+        <mat-option *ngFor="let type of filteredDismissalType" [value]="type.id">
+          {{ type.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+    <!-- Razón de Baja -->
+    <div class="form-field">
+      <label>Razón de Baja (Opcional)</label>
+      <mat-form-field appearance="outline" class="w-100">
+        <input matInput formControlName="dismissalReason" (input)="limitCharacters('dismissalReason', 100)" />
+      </mat-form-field>
+    </div>
+
+    <!-- Botones -->
+    <div class="itg-button-group">
+      <button mat-flat-button class="itg-cancel-button" (click)="onCancel()">
+        Cancelar
+      </button>
+      <button
+        mat-stroked-button
+        class="itg-primary-button"
+        (click)="onSubmit()"
+        [disabled]="equipmentDismissalTypeForm.invalid">
+        Dar de Baja
+      </button>
+    </div>
+  </form>
+</div>

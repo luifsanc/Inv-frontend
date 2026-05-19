@@ -1,0 +1,44 @@
+<div class="chart-title">
+  <h2>Activos</h2>
+  <mat-form-field
+    appearance="outline"
+    style="width: 100%; max-width: 300px; margin-bottom: 16px"
+  >
+    <mat-select
+      [(ngModel)]="selectedYear"
+      (selectionChange)="onYearChange($event)"
+    >
+      <mat-option *ngFor="let year of years" [value]="year">
+        {{ year }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<div class="chart-container">
+  @if (lineData()) {
+  <ngx-charts-line-chart
+    [view]="view()"
+    [scheme]="'nightLights'"
+    [results]="lineData()"
+    [gradient]="true"
+    [xAxis]="true"
+    [yAxis]="true"
+    [legend]="false"
+    [showXAxisLabel]="false"
+    [showYAxisLabel]="false"
+    [showGridLines]="false"
+    [autoScale]="true"
+    [tooltipDisabled]="true"
+    [showRefLabels]="true"
+    [curve]="curve"
+  >
+    <ng-template #tooltipTemplate let-model="model">
+      <div class="custom-tooltip">
+        <strong>{{ model.name }}</strong>
+        <p>Valor: {{ model.value }}</p>
+        <p>Fecha: {{ model.series[0].name }}</p>
+      </div>
+    </ng-template>
+  </ngx-charts-line-chart>
+  }
+</div>

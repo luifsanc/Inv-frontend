@@ -1,0 +1,63 @@
+<!-- Perfil del usuario -->
+<div class="user-detail-container" *ngIf="userData">
+  <!-- Encabezado -->
+  <div class="user-header">
+    <div class="avatar-border-container">
+      <div class="avatar-circle">
+        <mat-icon class="gear-icon">person</mat-icon>
+      </div>
+    </div>
+
+    <div class="user-summary">
+      <h2>{{ userData.username }}</h2>
+      <p><strong>Email:</strong> {{ userData.email }}</p>
+      <p>
+        <span class="status-dot" [ngClass]="userData.active ? 'dot-active' : 'dot-inactive'"></span>
+        {{ userData.active ? 'Activo' : 'Inactivo' }}
+      </p>
+      <p *ngIf="userData.suspended" style="color: var(--status-bug-reported)">
+        <mat-icon>warning</mat-icon> Usuario suspendido
+      </p>
+      <p>
+        <strong>Última conexión:</strong>
+        {{ userData.lastConnection ? (userData.lastConnection | date: 'dd/MM/yyyy HH:mm') : 'Nunca' }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Botones -->
+  <div class="itg-button-group">
+  <button mat-icon-button class="close-button" (click)="close()" aria-label="Cerrar modal">
+    <mat-icon>close</mat-icon>
+  </button>
+
+    <button mat-raised-button color="primary" (click)="openChangePasswordDialog()" class="change-password-btn">
+      <mat-icon>lock</mat-icon>
+      Cambiar Contraseña
+    </button>
+  </div>
+
+  <!-- Información general -->
+  <mat-card class="equipment-info-card">
+    <mat-card-title>
+      <mat-icon color="primary">person_search</mat-icon>
+      Información general
+    </mat-card-title>
+    <mat-card-content>
+      <div class="detail-grid">
+        <div><strong>Última modificación:</strong> {{ userData.lastModificationDate | date: 'dd/MM/yyyy' }}</div>
+        <div><strong>Conectado actualmente:</strong> {{ userData.isLoggedIn ? 'Sí' : 'No' }}</div>
+        <div><strong>Estado de cuenta:</strong> {{ userData.suspended ? 'Suspendido' : (userData.active ? 'Activo' : 'Inactivo') }}</div>
+        <div><strong>Tipo de Identificación:</strong> {{ userData.employee?.identificationType?.name || 'No definido' }}</div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- Cargando -->
+<ng-container *ngIf="!userData">
+  <div class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Cargando información del usuario...</p>
+  </div>
+</ng-container>

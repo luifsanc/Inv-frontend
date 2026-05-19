@@ -1,0 +1,9 @@
+<span
+  class="badge"
+  [class.en-progreso]="estado === 'En progreso' || estado === 'Activo' || estado === 'Disponible'"
+  [class.en-espera]="estado === 'En espera' || estado === 'Pendiente' || estado === 'Asignado' || estado === 'En Reparación' || estado === 'En Revisión'"
+  [class.completado]="estado === 'Completado' || estado === 'Finalizado' || estado === 'Reparado'"
+  [class.cancelado]="estado === 'Cancelado' || estado === 'Inactivo' || estado === 'Fuera de Servicio' || estado === 'Falla Mayor' || estado === 'Falla Menor' || estado === 'Irreparable'"
+>
+  {{ estado }}
+</span>

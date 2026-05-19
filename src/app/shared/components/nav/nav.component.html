@@ -1,0 +1,47 @@
+<mat-toolbar color="primary" class="top-nav">
+  <!-- Toggle mejorado -->
+  <button
+    mat-icon-button
+    (click)="onToggleSidenav()"
+    aria-label="Toggle sidenav"
+    class="toggle-button"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <h4 class="title">InventorySoft</h4>
+  <span class="spacer"></span>
+
+
+  <!-- Barra separadora -->
+  <div class="separator"></div>
+
+  <!-- Saludo + foto de perfil -->
+  <div class="user-info" *ngIf="userName">
+    <span class="greeting">Hola, {{ userName }}</span>
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="userMenu"
+      aria-label="Perfil de usuario"
+    >
+      <img
+        *ngIf="userPhotoUrl; else defaultUserIcon"
+        [src]="userPhotoUrl"
+        alt="Foto perfil"
+        class="profile-photo"
+      />
+      <ng-template #defaultUserIcon>
+        <mat-icon>person</mat-icon>
+      </ng-template>
+    </button>
+  </div>
+
+
+
+
+  <!-- Menú de usuario -->
+  <mat-menu #userMenu="matMenu">
+    <button mat-menu-item (click)="goToProfile()">Perfil</button>
+    <button mat-menu-item (click)="logout()">Cerrar sesión</button>
+  </mat-menu>
+</mat-toolbar>

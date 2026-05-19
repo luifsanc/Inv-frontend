@@ -1,0 +1,133 @@
+<div class="section-title">
+  <h3>Roles</h3>
+  <p>Gestion de roles establecidos en el portal</p>
+</div>
+
+<div class="panel-container">
+  <div class="toolbar">
+    <mat-form-field appearance="outline" class="search-input">
+      <input
+        matInput
+        [(ngModel)]="searchTerm"
+        placeholder="Buscar por nombre"
+        (keyup.enter)="search()"
+      />
+      <button mat-icon-button matPrefix (click)="search()" tabindex="-1">
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
+    <span class="spacer"></span>
+    <button mat-flat-button (click)="create()">
+      <mat-icon>add</mat-icon>
+      Nuevo Rol
+    </button>
+  </div>
+
+  @if(!isSmallScreen){
+  <div class="custom-table-wrapper">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z1">
+      <!-- Nombre -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Nombre</th>
+        <td mat-cell *matCellDef="let rol">{{ rol.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="active">
+        <th mat-header-cell *matHeaderCellDef>Estado</th>
+        <td mat-cell *matCellDef="let rol">
+          <span
+            class="status-dot"
+            [ngClass]="rol.active ? 'dot-active' : 'dot-inactive'"
+          ></span>
+          {{ rol.active ? "Activo" : "Inactivo" }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="creationDate">
+        <th mat-header-cell *matHeaderCellDef>Creado</th>
+        <td mat-cell *matCellDef="let rol">
+          {{ rol.creationDate | date : "dd/MM/yyyy HH:mm" }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="rolePrivileges">
+        <th mat-header-cell *matHeaderCellDef>Permisos</th>
+        <td mat-cell *matCellDef="let rol"> <span class="one-line-ellipsis">{{ getPermisionNames(rol) }}</span></td>
+      </ng-container>
+
+      <!-- Acciones -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let rol" class="actions-cell">
+          <button
+              mat-icon-button
+              [matMenuTriggerFor]="menu"
+              aria-label="Opciones">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item >
+              <mat-icon>visibility</mat-icon>
+              <span>Ver</span>
+            </button>
+            <button mat-menu-item (click)="edit(rol)">
+              <mat-icon>edit</mat-icon>
+              <span>Editar</span>
+            </button>
+            <button
+              mat-menu-item
+              [disabled]="!rol.active"
+              (click)="warningDelete(rol)">
+              <mat-icon [class.inactive-icon]="!rol.active">delete</mat-icon>
+              <span>Eliminar</span>
+            </button>
+          </mat-menu>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+  }@else {
+  <div class="card-container">
+    <ng-container *ngIf="dataSource.connect() | async as users">
+      <mat-card *ngFor="let rol of users" class="rol-card">
+        <mat-card-title>{{ rol.name }}</mat-card-title>
+        <mat-card-content>
+          <p>
+            <span
+              class="status-dot"
+              [ngClass]="rol.active ? 'dot-active' : 'dot-inactive'"
+            ></span>
+            {{ rol.active ? "Activo" : "Inactivo" }}
+          </p>
+          <p><span class="one-line-ellipsis">Privilegios: {{ getPermisionNames(rol) }}</span></p>
+        </mat-card-content>
+
+        <mat-card-actions align="end">
+          <button mat-icon-button>
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <button mat-icon-button (click)="edit(rol)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button [disabled]="!rol.active" (click)="warningDelete(rol)">
+            <mat-icon [class.inactive-icon]="!rol.active" >delete</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </ng-container>
+  </div>
+
+  }
+
+  <mat-paginator
+    [length]="total"
+    [pageSize]="20"
+    [pageSizeOptions]="[5, 10, 20]"
+    (page)="onPageChange($event)"
+  >
+  </mat-paginator>
+</div>

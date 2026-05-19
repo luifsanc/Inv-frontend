@@ -1,0 +1,109 @@
+<div class="form-wrapper">
+  <div class="form-overlay" *ngIf="isSubmitting || loading">
+    <div class="loading-spinner">
+      <mat-progress-spinner mode="indeterminate" diameter="30"
+      ></mat-progress-spinner>
+      <span style="margin-left: 10px" *ngIf="isSubmitting">Guardando...</span>
+      <span style="margin-left: 10px" *ngIf="loading">Cargando...</span>
+    </div>
+  </div>
+
+  <form [formGroup]="assignmentForm">
+    <div class="form-row">
+      <!-- Empleado -->
+      <div class="form-field">
+        <label>Empleado <span class="required-asterisk">*</span></label>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-select formControlName="employee" required>
+            <!-- Buscar-->
+            <mat-option>
+            <ngx-mat-select-search
+              [formControl]="employeeFilterCtrl"
+              placeholderLabel="Buscar empleado..."
+              noEntriesFoundLabel="No se encontraron empleados">
+            </ngx-mat-select-search>
+            </mat-option>
+
+          <!-- Opciones filtradas -->
+          <mat-option *ngFor="let emp of filteredEmployees" [value]="emp.id">
+            {{ emp.fullName }}
+          </mat-option>
+        </mat-select>
+
+          <mat-error
+            *ngIf="assignmentForm.get('employee')?.hasError('required')"
+          >
+            El empleado es obligatorio
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Equipo -->
+      <div class="form-field">
+        <label>Equipo <span class="required-asterisk">*</span></label>
+        <mat-form-field appearance="outline" class="w-100">
+        <mat-select formControlName="equipment" required>
+          <!-- Buscar-->
+          <mat-option>
+          <ngx-mat-select-search
+            [formControl]="equipmentFilterCtrl"
+            placeholderLabel="Buscar equipo..."
+            noEntriesFoundLabel="No se encontraron equipos">
+          </ngx-mat-select-search>
+          </mat-option>
+
+          <!-- Opciones filtradas -->
+          <mat-option *ngFor="let eq of filteredEquipments" [value]="eq.id">
+            {{ eq.category }} - {{ eq.brand }} {{ eq.model }} ({{ eq.serialNumber }})
+          </mat-option>
+        </mat-select>
+
+          <mat-error
+            *ngIf="assignmentForm.get('equipment')?.hasError('required')">
+            El equipo es obligatorio
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Fecha de Asignación -->
+    <div class="form-row">
+      <div class="form-field">
+        <label
+          >Fecha de asignación <span class="required-asterisk">*</span></label
+        >
+        <mat-form-field appearance="outline" class="w-100">
+          <input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="assignmentDate"
+            placeholder="dd/mm/yyyy"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error
+            *ngIf="assignmentForm.get('assignmentDate')?.hasError('required')"
+          >
+            La fecha es obligatoria
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+
+    <!-- Botones -->
+    <div class="itg-button-group">
+      <button mat-flat-button class="itg-cancel-button" (click)="onCancel()">
+        Cancelar
+      </button>
+      <button mat-flat-button class="itg-primary-button"
+        (click)="onSubmit()"
+        [disabled]="assignmentForm.invalid || isSubmitting">
+        {{ entityId ? "Actualizar asignación" : "Crear asignación" }}
+      </button>
+    </div>
+  </form>
+</div>

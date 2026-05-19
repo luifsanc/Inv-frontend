@@ -1,0 +1,114 @@
+
+<!-- Detalle del usuario -->
+<div class="user-detail-container" *ngIf="!loading && userDetails">
+  <!-- Encabezado -->
+  <div class="user-header">
+    <div class="avatar-border-container">
+      <div class="avatar-circle">
+        <mat-icon class="gear-icon">person</mat-icon>
+      </div>
+    </div>
+
+    <div class="user-summary">
+      <h2>{{ userDetails.username }}</h2>
+      <p><strong>Email:</strong> {{ userDetails.email }}</p>
+      <p><strong>Nombres:</strong> {{ userDetails.firstNames }}</p>
+      <p>
+        <span class="status-dot" [ngClass]="userDetails.active ? 'dot-active' : 'dot-inactive'"></span>
+        {{ userDetails.active ? 'Activo' : 'Inactivo' }}
+      </p>
+      <p *ngIf="userDetails.suspended" style="color: var(--status-bug-reported)">
+        <mat-icon>warning</mat-icon> Usuario suspendido
+      </p>
+      <p>
+        <strong>Última conexión:</strong>
+        {{ userDetails.lastConnection ? (userDetails.lastConnection | date: 'dd/MM/yyyy HH:mm') : 'Nunca' }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Botón volver -->
+  <div class="itg-button-group">
+    <button mat-stroked-button class="itg-cancel-button" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      Volver
+    </button>
+  </div>
+
+  <!-- Información general -->
+  <mat-card class="equipment-info-card">
+    <mat-card-title>
+      <mat-icon color="primary">person_search</mat-icon>
+      Información general
+    </mat-card-title>
+    <mat-card-content>
+      <div class="detail-grid">
+        <div><strong>Última modificación:</strong> {{ userDetails.lastModificationDate | date: 'dd/MM/yyyy' }}</div>
+        <div><strong>Conectado actualmente:</strong> {{ userDetails.isLoggedIn ? 'Sí' : 'No' }}</div>
+        <div><strong>Estado de cuenta:</strong> {{ userDetails.suspended ? 'Suspendido' : (userDetails.active ? 'Activo' : 'Inactivo') }}</div>
+        <div><strong>Tipo de Identificación:</strong> {{ userDetails.employee?.identificationType?.name || 'No definido' }}</div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Roles asignados -->
+  <mat-card *ngIf="userDetails.roles.length" class="equipment-info-card">
+    <mat-card-title>
+      <mat-icon color="primary">admin_panel_settings</mat-icon>
+      Roles asignados
+    </mat-card-title>
+    <mat-card-content>
+      <ul>
+        <li *ngFor="let role of userDetails.roles">{{ role.name }}</li>
+      </ul>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Todos los privilegios (rol + directos) -->
+  <mat-card *ngIf="allUserPrivileges.length" class="equipment-info-card">
+    <mat-card-title>
+      <mat-icon color="primary">lock_person</mat-icon>
+      Privilegios del usuario
+    </mat-card-title>
+    <mat-card-content>
+      <ul>
+        <li *ngFor="let privilege of allUserPrivileges" class="privilege-item">
+          <div class="privilege-header">
+            <mat-icon color="primary">vpn_key</mat-icon>
+            <strong>{{ getPrivilegeDisplayName(privilege.key) }}</strong>
+            <span class="role-badge">({{ getRoleForPrivilege(privilege.key) }})</span>
+          </div>
+          <div class="privilege-details">
+            <div><strong>Estado:</strong> {{ privilege.active ? 'Activo' : 'Inactivo' }}</div>
+            <div *ngIf="privilege.lastModificationDate">
+              <strong>Modificado:</strong> {{ privilege.lastModificationDate | date:'dd/MM/yyyy' }}
+            </div>
+          </div>
+        </li>
+      </ul>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Menús -->
+  <mat-card *ngIf="userDetails.menus.length" class="user-info-card">
+    <mat-card-title>Accesos a menús</mat-card-title>
+    <mat-card-content>
+      <div class="menu-list">
+        <div class="menu-item" *ngFor="let menu of userDetails.menus">
+          <mat-icon class="menu-icon">{{ menu.icon }}</mat-icon>
+          <div class="menu-info">
+            <div class="menu-label">{{ menu.label }}</div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- Cargando -->
+<ng-container *ngIf="loading">
+  <div class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Cargando información del usuario...</p>
+  </div>
+</ng-container>

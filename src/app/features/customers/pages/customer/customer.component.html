@@ -1,0 +1,148 @@
+<div class="section-title">
+  <h3>Clientes</h3>
+  <p>Gestión de clientes del aplicativo</p>
+</div>
+
+<div class="panel-container">
+  <div class="toolbar">
+    <mat-form-field appearance="outline" class="search-input">
+      <input
+        matInput
+        (input)="applyFilter($event)"
+        placeholder="Buscar por nombre, email, etc."
+      />
+      <button mat-icon-button matPrefix (click)="search()" tabindex="-1">
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
+    <span class="spacer"></span>
+    <!--
+    <button mat-flat-button (click)="create()">
+      <mat-icon>person_add</mat-icon>
+      Nuevo
+    </button>
+    -->
+
+  </div>
+
+  @if (!isSmallScreen) {
+  <div class="custom-table-wrapper">
+    <div class="table-scroll-wrapper">
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        class="mat-elevation-z1"
+        matSort
+      >
+        <!-- Nombre -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre Comercial</th>
+          <td mat-cell *matCellDef="let customer">
+            <strong>{{ customer.name }}</strong>
+            <p>
+              <span
+                class="status-dot"
+                [ngClass]="customer.status ? 'dot-active' : 'dot-inactive'"
+              ></span>
+              {{ customer.status ? "Activo" : "Inactivo" }}
+            </p>
+          </td>
+        </ng-container>
+
+        <!-- Email -->
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Correo</th>
+          <td mat-cell *matCellDef="let customer">
+            {{ customer.email }}
+          </td>
+        </ng-container>
+
+        <!-- Teléfono -->
+        <ng-container matColumnDef="phone">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Teléfono</th>
+          <td mat-cell *matCellDef="let customer">
+            {{ customer.phone }}
+          </td>
+        </ng-container>
+
+        <!-- Ruc -->
+        <ng-container matColumnDef="ruc">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>RUC</th>
+          <td mat-cell *matCellDef="let customer">
+            {{ customer.ruc }}
+          </td>
+        </ng-container>
+
+        <!-- Dirección -->
+        <ng-container matColumnDef="address">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Dirección</th>
+          <td mat-cell *matCellDef="let customer">
+            {{ customer.address || "No disponible" }}
+          </td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </div>
+  } @else {
+  <div class="card-container">
+    <ng-container *ngIf="dataSource.connect() | async as customers">
+      <mat-card *ngFor="let customer of customers" class="customer-card">
+        <mat-card-title>
+          {{ customer.name }}
+        </mat-card-title>
+
+        <mat-card-content>
+          <p>
+            <span
+              class="status-dot"
+              [ngClass]="customer.status ? 'dot-active' : 'dot-inactive'"
+            ></span>
+            {{ customer.status ? "Activo" : "Inactivo" }}
+          </p>
+
+          <div class="info-grid">
+            <div>
+              <strong>Teléfono:</strong>
+              {{ customer.phone || "No disponible" }}
+            </div>
+            <div><strong>Correo:</strong> {{ customer.email }}</div>
+            <div>
+              <strong>Dirección:</strong>
+              {{ customer.address || "No disponible" }}
+            </div>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions align="end">
+          <button
+            mat-icon-button
+            (click)="edit(customer)"
+            [disabled]="!customer.status"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            [disabled]="!customer.status"
+            (click)="warningDelete(customer)"
+          >
+            <mat-icon [class.inactive-icon]="!customer.status">delete</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </ng-container>
+  </div>
+  }
+
+  <mat-paginator
+    [length]="total"
+    [pageSize]="20"
+    [pageSizeOptions]="[5, 10, 20]"
+    (page)="onPageChange($event)"
+  >
+  </mat-paginator>
+</div>

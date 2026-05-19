@@ -1,0 +1,18 @@
+<div *ngIf="isOpen()" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button mat-icon-button class="close-button" (click)="close()">
+        <mat-icon>close</mat-icon>
+      </button>
+      <h2 mat-dialog-title class="modal-title-text">
+        <mat-icon *ngIf="icon()">{{ icon() }}</mat-icon> {{ title() }}
+      </h2>
+    </div>
+
+    <mat-dialog-content class="modal-form-container">
+      <ng-container *ngIf="content() as contentTpl">
+        <ng-container *ngComponentOutlet="contentTpl;"></ng-container>
+      </ng-container>
+    </mat-dialog-content>
+  </div>
+</div>

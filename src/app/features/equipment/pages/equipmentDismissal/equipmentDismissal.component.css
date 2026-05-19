@@ -1,0 +1,230 @@
+.panel-container {
+  padding: 1rem;
+  background-color: white;
+  border-radius: 1rem;
+}
+
+/* Barra de búsqueda */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 40px;
+  margin-bottom: 1.5rem;
+}
+
+.toolbar mat-form-field {
+  height: 100%;
+  margin: 0;
+  width: 25rem;
+}
+
+.toolbar mat-form-field .mat-form-field-wrapper {
+  height: 100%;
+  padding-bottom: 0;
+}
+
+.toolbar mat-form-field input.mat-input-element {
+  height: 100%;
+  padding: 0 12px;
+  box-sizing: border-box;
+}
+
+button.mat-icon-button {
+  color: var(--itg-primary);
+}
+
+/* Botones generales */
+button.mat-mdc-unelevated-button:not(:disabled) {
+  color: var(--itg-primary);
+  background-color: var(--itg-primary-bg);
+  border: 2px solid var(--itg-primary);
+  border-radius: .5rem;
+  transition: background-color 0.3s ease;
+}
+
+button.mat-mdc-unelevated-button:not(:disabled):hover {
+  background-color: #2685BF;
+  color: white;
+}
+
+/* Tabla y responsive */
+.custom-table-wrapper {
+  overflow-x: auto;
+}
+
+.table-scroll-wrapper {
+  min-width: 800px;
+}
+
+/* Card layout para pantallas pequeñas */
+.card-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.equipment-card {
+  border-radius: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.text-muted {
+  color: #6c757d;
+  font-size: 0.85rem;
+}
+
+/* ===== CONFIGURACIÓN DE TABLA MEJORADA ===== */
+
+/* Configuración flexible de tabla */
+.custom-table-wrapper table {
+  table-layout: fixed; /* Volvemos a fixed para controlar mejor los anchos */
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: separate;
+}
+
+.custom-table-wrapper th,
+.custom-table-wrapper td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal; /* permite salto de línea */
+  word-break: break-word;
+  vertical-align: middle; /* CENTRADO VERTICAL GENERAL */
+  padding: 12px 16px; /* Incrementado el padding horizontal para más separación */
+}
+
+/* ===== CENTRADO VERTICAL Y HORIZONTAL DE TÍTULOS ===== */
+.custom-table-wrapper th.mat-header-cell {
+  text-align: center; /* Centrado horizontal de todos los títulos */
+  vertical-align: middle; /* Centrado vertical de todos los títulos */
+  font-weight: 600;
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+  white-space: nowrap; /* Evita que los títulos se partan en líneas */
+  min-width: fit-content; /* Asegura espacio mínimo necesario */
+}
+
+/* ===== ANCHOS PERSONALIZADOS OPTIMIZADOS ===== */
+th.mat-header-cell:nth-child(1), /* Equipo */
+td.mat-cell:nth-child(1) {
+  width: 16%;
+}
+
+th.mat-header-cell:nth-child(2), /* Equipo Identificación */
+td.mat-cell:nth-child(2) {
+  width: 16%;
+}
+
+th.mat-header-cell:nth-child(3), /* Tipo de Baja */
+td.mat-cell:nth-child(3) {
+  width: 12%;
+}
+
+th.mat-header-cell:nth-child(4), /* Razón - MÁS ESPACIO */
+td.mat-cell:nth-child(4) {
+  width: 32%; /* Espacio para razón */
+}
+
+th.mat-header-cell:nth-child(5), /* Fecha de Baja */
+td.mat-cell:nth-child(5) {
+  width: 14%;
+}
+
+th.mat-header-cell:nth-child(6), /* Oficina - pegado al borde derecho */
+td.mat-cell:nth-child(6) {
+  width: 10%;
+}
+
+/* ===== ALINEACIÓN ESPECÍFICA PARA FECHA Y OFICINA ===== */
+
+/* Títulos de Fecha de Baja y Oficina alineados a la derecha */
+th.mat-header-cell:nth-child(5), /* Fecha de Baja */
+th.mat-header-cell:nth-child(6)  /* Oficina */ {
+  text-align: right !important;
+  padding-right: 16px; /* Un poco de separación del borde */
+}
+
+/* Contenido de Fecha de Baja y Oficina alineado a la derecha */
+td.mat-cell:nth-child(5), /* Fecha de Baja */
+td.mat-cell:nth-child(6)  /* Oficina */ {
+  text-align: right;
+  padding-right: 16px; /* Un poco de separación del borde */
+}
+
+/* Oficina pegada al borde derecho de la tabla */
+th.mat-header-cell:nth-child(6), /* Oficina título */
+td.mat-cell:nth-child(6)  /* Oficina contenido */ {
+  padding-right: 8px; /* Menos padding para pegarlo más al borde */
+}
+
+/* ===== MEJORAS VISUALES ADICIONALES ===== */
+
+/* Subtexto más suave */
+.sub-info {
+  font-size: 0.85em;
+  color: #666;
+  margin-top: 2px;
+}
+
+/* Hover effect para filas */
+.custom-table-wrapper tr.mat-row:hover {
+  background-color: #f8f9fa;
+}
+
+/* Espaciado mejorado para el contenido de celdas */
+.custom-table-wrapper td.mat-cell div {
+  line-height: 1.4;
+}
+
+/* Estilo para texto fuerte en celdas */
+.custom-table-wrapper td.mat-cell div strong {
+  font-weight: 600;
+  color: #333;
+}
+
+/* Ajuste específico para la columna de razón */
+th.mat-header-cell:nth-child(4) p,
+td.mat-cell:nth-child(4) p {
+  margin: 0;
+  line-height: 1.4;
+  max-height: 60px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  th.mat-header-cell:nth-child(4),
+  td.mat-cell:nth-child(4) {
+    width: 30%;
+  }
+}
+
+@media (max-width: 768px) {
+  .custom-table-wrapper th,
+  .custom-table-wrapper td {
+    padding: 8px 6px;
+    font-size: 0.9rem;
+  }
+
+  th.mat-header-cell:nth-child(6),
+  td.mat-cell:nth-child(6) {
+    padding-right: 10px;
+  }
+}

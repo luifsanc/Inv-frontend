@@ -1,0 +1,67 @@
+<div class="form-wrapper">
+
+  <form [formGroup]="warrantyForm" (ngSubmit)="onSubmit()">
+
+
+
+    <!-- Fila de fechas -->
+    <div class="form-row">
+      <div class="form-field">
+        <label>Fecha de inicio *</label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input matInput [matDatepicker]="startPicker" formControlName="warrantyStartDate">
+          <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+          <mat-error *ngIf="warrantyForm.get('warrantyEndDate')?.hasError('endDateInvalid')">
+            La fecha de fin no puede ser menor a la fecha actual
+            </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-field">
+        <label>Fecha de fin *</label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input matInput [matDatepicker]="endPicker" formControlName="warrantyEndDate">
+          <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+          <mat-datepicker #endPicker></mat-datepicker>
+          <mat-error *ngIf="warrantyForm.get('warrantyEndDate')?.hasError('required')">
+            La fecha de fin es obligatoria
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Soporte -->
+    <div class="form-row">
+  <div class="form-field support-full-width">
+    <label>Contacto de soporte *</label>
+    <mat-form-field appearance="outline" class="w-100">
+      <input matInput formControlName="supportContact" maxlength="100">
+      <mat-error *ngIf="warrantyForm.get('supportContact')?.hasError('required')">
+        El contacto de soporte es obligatorio
+      </mat-error>
+    </mat-form-field>
+  </div>
+</div>
+
+    <!-- Condiciones -->
+    <div class="form-row">
+      <div class="form-field support-full-width">
+        <label>Condiciones *</label>
+        <mat-form-field appearance="outline" class="w-100">
+          <textarea matInput formControlName="conditions" maxlength="255"></textarea>
+          <mat-error *ngIf="warrantyForm.get('conditions')?.hasError('required')">
+            Las condiciones son obligatorias
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+
+    <!-- Botones -->
+    <div class="form-row justify-end">
+      <button mat-stroked-button type="button" (click)="onCancel()">Cancelar</button>
+      <button mat-flat-button color="primary" type="submit" [disabled]="warrantyForm.invalid">Guardar</button>
+    </div>
+  </form>
+</div>

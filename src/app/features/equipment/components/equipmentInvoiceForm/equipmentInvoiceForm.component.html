@@ -1,0 +1,150 @@
+<div class="form-wrapper">
+  <!-- Cargando o enviando -->
+  <div class="form-overlay" *ngIf="isSubmitting || loading">
+    <div class="loading-spinner">
+      <mat-progress-spinner mode="indeterminate" diameter="30"></mat-progress-spinner>
+      <span style="margin-left: 10px" *ngIf="isSubmitting">Guardando...</span>
+      <span style="margin-left: 10px" *ngIf="loading">Cargando...</span>
+    </div>
+  </div>
+
+  <!-- Formulario -->
+  <form [formGroup]="equipmentInvoiceForm">
+    <div class="form-field">
+      <label>Descripción <span class="required-asterisk">*</span></label>
+      <mat-form-field appearance="outline" class="w-100">
+        <input matInput formControlName="description" placeholder="Descripción del ítem" />
+        <mat-error *ngIf="equipmentInvoiceForm.get('description')?.hasError('required')">
+          La descripción es obligatoria
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <!-- Precio Unitario -->
+      <div class="form-field">
+        <label>Precio Unitario <span class="required-asterisk">*</span></label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input
+            type="number"
+            matInput
+            formControlName="unitPrice"
+            placeholder="0.00"
+            min="0"
+          />
+          <mat-error *ngIf="equipmentInvoiceForm.get('unitPrice')?.hasError('required')">
+            El precio unitario es obligatorio
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Cantidad -->
+      <div class="form-field">
+        <label>Cantidad <span class="required-asterisk">*</span></label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input
+            type="number"
+            matInput
+            formControlName="quantity"
+            placeholder="1"
+            min="1"
+          />
+          <mat-error *ngIf="equipmentInvoiceForm.get('quantity')?.hasError('required')">
+            La cantidad es obligatoria
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <!-- Subtotal -->
+      <div class="form-field">
+        <label>Subtotal</label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input matInput formControlName="subtotal" placeholder="0.00"/>
+        </mat-form-field>
+      </div>
+
+      <!-- Impuesto (%) -->
+      <div class="form-field">
+        <label>Impuesto (%)</label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input type="number" matInput formControlName="tax" placeholder="0" min="0" />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <!-- Descuento (%) -->
+      <div class="form-field">
+        <label>Descuento (%)</label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input type="number" matInput formControlName="discount" placeholder="0" min="0" />
+        </mat-form-field>
+      </div>
+
+      <!-- Total -->
+      <div class="form-field">
+        <label>Total</label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input matInput formControlName="total" placeholder="0.00" />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label>Proveedor <span class="required-asterisk">*</span></label>
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-select formControlName="supplier" placeholder="Seleccione proveedor">
+          <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">
+            {{ supplier.businessName }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="equipmentInvoiceForm.get('supplier')?.hasError('required')">
+          El proveedor es obligatorio
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-field">
+      <label>Fecha de Factura <span class="required-asterisk">*</span></label>
+      <mat-form-field appearance="outline" class="w-100">
+        <input matInput [matDatepicker]="picker" formControlName="invoiceDate" placeholder="dd/mm/yyyy"/>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+       <div class="info-text">
+        <mat-icon class="info-icon-inline">info</mat-icon>
+        Si no se selecciona una fecha, se utilizará la fecha actual.
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label>Número de Factura <span class="required-asterisk">*</span></label>
+      <mat-form-field appearance="outline" class="w-100">
+        <input matInput formControlName="invoiceNumber" placeholder="Ej. FAC-2025-001" />
+        <mat-error *ngIf="equipmentInvoiceForm.get('invoiceNumber')?.hasError('required')">
+          El número de factura es obligatorio
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+
+
+
+    <!-- Botones -->
+    <div class="itg-button-group">
+      <button mat-flat-button class="itg-cancel-button" (click)="onCancel()">
+        Cancelar
+      </button>
+      <button
+        mat-flat-button
+        class="itg-primary-button"
+        (click)="onSubmit()"
+        [disabled]="equipmentInvoiceForm.invalid || isSubmitting"
+      >
+        {{ entityId ? 'Actualizar detalle' : 'Crear detalle' }}
+      </button>
+    </div>
+  </form>
+</div>

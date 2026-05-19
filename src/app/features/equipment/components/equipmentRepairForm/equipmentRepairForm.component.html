@@ -1,0 +1,92 @@
+<div class="form-wrapper">
+  <div class="form-overlay" *ngIf="isSubmitting">
+    <div class="loading-spinner">
+      <mat-progress-spinner
+        mode="indeterminate"
+        diameter="30"
+      ></mat-progress-spinner>
+      <span style="margin-left: 10px" *ngIf="isSubmitting">Guardando...</span>
+    </div>
+  </div>
+
+  <form [formGroup]="repairForm">
+    <!-- Descripción -->
+    <div class="form-row">
+      <div class="form-field">
+        <strong>Número de serie del equipo:</strong>
+        {{ equipment.serialNumber }}
+      </div>
+      <div class="form-field">
+        <label>Descripción <span class="required-asterisk">*</span></label>
+        <mat-form-field appearance="outline" class="w-100  description-field">
+          <textarea
+            matInput
+            formControlName="description"
+            placeholder="Descripción del problema o reparación"
+            rows="3"
+            class="description"
+          ></textarea>
+          <mat-error
+            *ngIf="repairForm.get('description')?.hasError('required')"
+          >
+            La descripción es obligatoria
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Proveedor del servicio -->
+    <div class="form-row">
+      <div class="form-field">
+      <label>Proveedor del servicio <span class="required-asterisk">*</span></label>
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-select formControlName="supplierId" placeholder="Seleccione proveedor">
+          <mat-option *ngFor="let supplier of filteredSuppliers" [value]="supplier.id">
+            {{ supplier.businessName }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="repairForm.get('supplierId')?.hasError('required')">
+          El proveedor del servicio es obligatorio
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+
+      <div class="form-field">
+        <label>Costo <span class="required-asterisk">*</span></label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input
+            matInput
+            type="number"
+            formControlName="cost"
+            placeholder="0.00"
+            min="0"
+            (keydown)="preventInvalidInput($event)"
+          />
+          <mat-error *ngIf="repairForm.get('cost')?.hasError('required')">
+            El costo es obligatorio
+          </mat-error>
+          <mat-error *ngIf="repairForm.get('cost')?.hasError('min')">
+            El costo no puede ser negativo
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Botones -->
+    <div class="itg-button-group">
+      <button mat-flat-button class="itg-cancel-button" (click)="onCancel()">
+        Cancelar
+      </button>
+      <button
+        mat-flat-button
+        color="primary"
+        class="itg-primary-button"
+        (click)="onSubmit()"
+        [disabled]="repairForm.invalid || isSubmitting"
+      >
+        {{ entityId ? "Actualizar reparación" : "Crear reparación" }}
+      </button>
+    </div>
+  </form>
+</div>

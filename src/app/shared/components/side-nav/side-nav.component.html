@@ -1,0 +1,38 @@
+<mat-nav-list class="side-nav-items">
+  <div class="sid-nav-header">
+    <img src="assets/logo.svg" alt="Logo" class="sid-nav-logo" />
+  </div>
+
+  <ng-container *ngFor="let menu of menus">
+    <a
+      mat-list-item
+      *ngIf="!menu.children?.length"
+      [routerLink]="menu.route"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      (click)="itemSelected.emit()"
+    >
+      <div class="center-div">
+        <mat-icon *ngIf="menu.icon">{{ menu.icon }}</mat-icon>
+      <span class = "menu-label"> {{ menu.label }} </span>
+      </div>
+    </a>
+
+    <mat-expansion-panel *ngIf="menu.children?.length">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon *ngIf="menu.icon">{{ menu.icon }}</mat-icon>
+          {{ menu.label }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <ng-container *ngFor="let child of getChildren(menu)">
+        <a mat-list-item [routerLink]="child.route" routerLinkActive="active" (click)="itemSelected.emit()">
+          <div class="center-div">
+            <mat-icon *ngIf="child.icon">{{ child.icon }}</mat-icon>
+            {{ child.label }}
+          </div>
+        </a>
+      </ng-container>
+    </mat-expansion-panel>
+  </ng-container>
+</mat-nav-list>

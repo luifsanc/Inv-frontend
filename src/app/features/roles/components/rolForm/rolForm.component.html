@@ -1,0 +1,122 @@
+<div class="form-wrapper">
+  <div class="form-overlay" *ngIf="isSubmitting || loading">
+    <div class="loading-spinner">
+      <mat-progress-spinner
+        mode="indeterminate"
+        diameter="30"
+      ></mat-progress-spinner>
+      <span style="margin-left: 10px" *ngIf="isSubmitting">Guardando...</span>
+      <span style="margin-left: 10px" *ngIf="loading">Cargando...</span>
+    </div>
+  </div>
+
+  <div [formGroup]="roleForm">
+    <div class="form-row">
+      <!-- Nombre -->
+      <div class="form-field">
+        <label>Nombre del rol</label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input matInput formControlName="name" />
+          <mat-error *ngIf="roleForm.get('name')?.hasError('required')">
+            El nombre es obligatorio
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Descripción -->
+      <div class="form-field">
+        <label>Descripción</label>
+        <mat-form-field appearance="outline" class="w-100 description-field">
+          <textarea
+            matInput
+            formControlName="description"
+            class="description"
+          ></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <!-- Privilegios -->
+      <div class="form-field">
+        <label>Privilegios</label>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-select formControlName="privilegesId" multiple>
+            <mat-option>
+            <ngx-mat-select-search
+              [formControl]="privilegeFilterCtrl"
+              placeholderLabel="Buscar privilegio"
+              noEntriesFoundLabel="Sin coincidencias">
+            </ngx-mat-select-search>
+            </mat-option>
+            <mat-option
+              *ngFor="let privilege of filteredPrivileges"
+              [value]="privilege.id"
+
+            >
+              {{ privilege.key }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Menús -->
+      <div class="form-field">
+        <label>Menús</label>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-select formControlName="menusId" multiple>
+           <mat-option>
+            <ngx-mat-select-search
+              [formControl]="menuFilterCtrl"
+              placeholderLabel="Buscar menú"
+              noEntriesFoundLabel="Sin coincidencias">
+            </ngx-mat-select-search>
+            </mat-option>
+            <mat-option
+              *ngFor="let menu of filteredFlattenedMenus"
+              [value]="menu.id"
+            >
+              {{ "—".repeat(menu.level) }} {{ menu.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <!-- Aplicación -->
+      <div class="form-field">
+        <label>Aplicación</label>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-select formControlName="applicationId">
+            <mat-option [value]="1">
+              {{ "Inventory" }}
+            </mat-option>
+            <mat-option *ngFor="let app of applications" [value]="app.id">
+              {{ app.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="roleForm.get('applicationId')?.hasError('required')"
+          >
+            La aplicación es obligatoria
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="itg-button-group">
+      <button mat-flat-button class="itg-cancel-button" (click)="onCancel()">
+        Cancelar
+      </button>
+      <button
+        mat-flat-button
+        class="itg-primary-button"
+        (click)="onSubmit()"
+        [disabled]="isSubmitting || roleForm.invalid"
+      >
+       {{entityId!= 0 ? "Actualizar Rol": " Crear Rol" }}
+      </button>
+    </div>
+  </div>
+</div>

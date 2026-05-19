@@ -1,0 +1,16 @@
+<app-nav (toggleSidenav)="onToggleSidenav()"></app-nav>
+
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    #sidenav
+    [mode]="sidenavMode"
+    [opened]="sidenavOpened"
+    class="sidenav"
+  >
+    <app-side-nav (itemSelected)="onNavItemClicked()"></app-side-nav>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="main-content">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

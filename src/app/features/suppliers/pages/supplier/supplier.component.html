@@ -1,0 +1,128 @@
+<div class="section-title">
+  <h3>Proveedores</h3>
+  <p>Gestión de proveedores registrados en el sistema</p>
+</div>
+
+<div class="panel-container">
+  <div class="toolbar">
+    <mat-form-field appearance="outline" class="search-input">
+      <input
+        matInput
+        (input)="applyFilter($event)"
+        placeholder="Buscar por nombre o RUC"
+      />
+      <button mat-icon-button matPrefix (click)="searchSuppliers()" tabindex="-1">
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <span class="spacer"></span>
+
+    <button mat-flat-button (click)="createSupplier()">
+      <mat-icon>add_business</mat-icon>
+      Nuevo
+    </button>
+  </div>
+
+  <!-- Vista de tabla para pantallas grandes -->
+  @if (!isSmallScreen) {
+    <div class="custom-table-wrapper">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z1">
+
+        <!-- Tipo de proveedor -->
+        <ng-container matColumnDef="supplierType">
+          <th mat-header-cell *matHeaderCellDef>Tipo de proveedor</th>
+          <td mat-cell *matCellDef="let s">{{ s.supplierType?.name }}</td>
+        </ng-container>
+
+
+        <!-- Nombre comercial -->
+        <ng-container matColumnDef="businessName">
+          <th mat-header-cell *matHeaderCellDef>Nombre</th>
+          <td mat-cell *matCellDef="let s">{{ s.businessName }}</td>
+        </ng-container>
+
+        <!-- Dirección -->
+        <ng-container matColumnDef="address">
+          <th mat-header-cell *matHeaderCellDef>Dirección</th>
+          <td mat-cell *matCellDef="let s">{{ s.address }}</td>
+        </ng-container>
+
+        <!-- Teléfono -->
+        <ng-container matColumnDef="phone">
+          <th mat-header-cell *matHeaderCellDef>Teléfono</th>
+          <td mat-cell *matCellDef="let s">{{ s.phone }}</td>
+        </ng-container>
+
+        <!-- Email -->
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef>Email</th>
+          <td mat-cell *matCellDef="let s">{{ s.email }}</td>
+        </ng-container>
+
+        <!-- RUC -->
+        <ng-container matColumnDef="ruc">
+          <th mat-header-cell *matHeaderCellDef>RUC</th>
+          <td mat-cell *matCellDef="let s">{{ s.ruc }}</td>
+        </ng-container>
+
+        <!-- Acciones -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let supplier" class="actions-cell">
+            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Opciones">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="editSupplier(supplier)">
+                <mat-icon>edit</mat-icon>
+                <span>Editar</span>
+              </button>
+              <button mat-menu-item (click)="warningDelete(supplier)">
+                <mat-icon>delete</mat-icon>
+                <span>Eliminar</span>
+              </button>
+            </mat-menu>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns.concat(['actions'])"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns.concat(['actions'])"></tr>
+      </table>
+    </div>
+  }
+
+  <!-- Vista tipo tarjeta para pantallas pequeñas --->
+  @else {
+    <div class="card-container">
+      <ng-container *ngIf="dataSource.connect() | async as suppliers">
+        <mat-card *ngFor="let s of suppliers" class="user-card">
+          <mat-card-title>{{ s.businessName }}</mat-card-title>
+          <mat-card-content>
+            <p><strong>Dirección:</strong> {{ s.address }}</p>
+            <p><strong>Email:</strong> {{ s.email }}</p>
+            <p><strong>Teléfono:</strong> {{ s.phone }}</p>
+            <p><strong>RUC:</strong> {{ s.ruc }}</p>
+          </mat-card-content>
+          <mat-card-actions align="end">
+            <button mat-icon-button (click)="editSupplier(s)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="warningDelete(s)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </ng-container>
+    </div>
+  }
+
+  <!-- Paginador -->
+  <mat-paginator
+    [length]="totalSupplier"
+    [pageSize]="20"
+    [pageSizeOptions]="[5, 10, 20]"
+    (page)="onPageChange($event)">
+  </mat-paginator>
+</div>

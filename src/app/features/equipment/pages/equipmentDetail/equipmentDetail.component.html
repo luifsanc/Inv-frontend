@@ -1,0 +1,196 @@
+<div class="equipment-detail-container" *ngIf="equipment">
+  <!-- Imagen e información básica -->
+  <div class="equipment-header">
+    <div class="equipment-image-placeholder">
+      <img
+        *ngIf="equipment.imageUrl; else noImage"
+        class="equipment-image"
+        [src]="equipment.imageUrl"
+        alt="Imagen del equipo"
+      />
+      <ng-template #noImage>
+        <!-- Placeholder SVG elegante -->
+        <svg
+          class="placeholder-svg"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 64 64"
+          fill="none"
+        >
+          <rect width="64" height="64" rx="8" fill="#ECECEC" />
+          <path
+            d="M22 24C22 20.6863 24.6863 18 28 18C31.3137 18 34 20.6863 34 24C34 27.3137 31.3137 30 28 30C24.6863 30 22 27.3137 22 24Z"
+            fill="#BDBDBD"
+          />
+          <path d="M10 50L23.5 33L36 47L44.5 36L54 50H10Z" fill="#BDBDBD" />
+        </svg>
+      </ng-template>
+    </div>
+
+    <div class="equipment-summary">
+      <h2>
+        {{ equipment.categoryName }} - {{ equipment.brand }}
+        {{ equipment.model }}
+      </h2>
+      <p><strong>Serie:</strong> {{ equipment.serialNumber }}</p>
+      <p><strong>Código:</strong> {{ equipment.itemCode }}</p>
+      <p>
+        <span
+          class="status-dot"
+          [ngClass]="equipment.status ? 'dot-active' : 'dot-inactive'"
+        ></span>
+        {{ equipment.status ? "Activo" : "Inactivo" }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Botones -->
+  <div class="itg-button-group equipment-actions">
+    <button mat-stroked-button class="itg-cancel-button" (click)="goBack()">
+      Volver
+    </button>
+
+    <ng-container *ngIf="equipment.status">
+    <ng-container *ngIf="!warrantyDetail; else editButton">
+    <button mat-flat-button color="primary"
+       class="itg-primary-button"
+       (click)="openWarrantyForm()">
+       <mat-icon>verified_user</mat-icon>
+       Añadir Garantía
+    </button>
+    </ng-container>
+    <ng-template #editButton>
+      <button mat-stroked-button color="primary"
+       class="itg-primary-button"
+      (click)="editWarranty()">
+    <mat-icon>verified_user</mat-icon>
+    Editar Garantía
+  </button>
+    </ng-template>
+    <button
+      mat-stroked-button
+      class="itg-primary-button"
+      color="accent"
+      (click)="openInvoiceForm()"
+    >
+      Añadir Factura
+    </button>
+    </ng-container> 
+  </div>
+
+  <!-- Detalles -->
+  <mat-card class="equipment-info-card">
+    <mat-card-title>Detalles del equipo</mat-card-title>
+    <mat-card-content>
+      <div class="detail-grid">
+        <div>
+          <strong>Factura:</strong> {{ equipment.invoice || "No registrada" }}
+        </div>
+       <div>
+     <strong>Garantía:</strong>
+     <ng-container *ngIf="equipment.warranty && equipment.warranty > 0; else noWarranty">
+    <span class="status-container status-container">
+      Si registrada
+     </span>
+      </ng-container>
+       <ng-template #noWarranty>
+      No registrada
+     </ng-template>
+      </div>
+        <div><strong>Estado:</strong> {{ equipment.equipmentStatusName }}</div>
+        <div>
+          <strong>Condición:</strong> {{ equipment.equipmentConditionName }}
+        </div>
+        <div><strong>Empresa:</strong> {{ equipment.companyName }}</div>
+        <div>
+          <strong>Stock de categoría:</strong> {{ equipment.categoryStock }}
+        </div>
+        <div>
+          <strong>Creado:</strong>
+          {{ equipment.creationDate | date : "dd/MM/yyyy" }}
+        </div>
+        <div>
+          <strong>Modificado:</strong>
+          {{ equipment.modificationDate | date : "dd/MM/yyyy" }}
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+<!-- Detalle de la Garantía -->
+<mat-card *ngIf="warrantyDetail" class="equipment-info-card">
+  <mat-card-title>
+    <mat-icon color="primary">verified_user</mat-icon>
+    Detalle de la garantía
+  </mat-card-title>
+
+  <mat-card-content (click)="editWarranty()" style="cursor: pointer;">
+    <div class="detail-grid">
+      <div>
+        <strong>Fecha de inicio:</strong>
+        {{ warrantyDetail.warrantyStartDate | date: 'dd/MM/yyyy' }}
+      </div>
+      <div>
+        <strong>Fecha de fin:</strong>
+        {{ warrantyDetail.warrantyEndDate | date: 'dd/MM/yyyy' }}
+      </div>
+      <div *ngIf="warrantyDetail.supportContact">
+        <strong>Contacto de soporte:</strong>
+        <span>{{ warrantyDetail.supportContact }}</span>
+      </div>
+      <div>
+        <strong>Condiciones:</strong> {{ warrantyDetail.conditions }}
+      </div>
+      <div *ngIf="warrantyDetail.warrantyEndDate" class="remaining-days">
+        <strong style="color: var(--status-bug-reported);">
+          Días restantes:
+          {{ calculateRemainingDays(warrantyDetail.warrantyEndDate) }}
+        </strong>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+  <!-- Detalles de factura-->
+  <mat-card class="equipment-info-card" *ngIf="invoice">
+    <mat-card-title>
+      <mat-icon color="primary">verified_user</mat-icon>
+      Detalles de Factura</mat-card-title>
+    <mat-card-content>
+      <div class="detail-grid">
+        <div><strong>Descripción:</strong> {{ invoice.description }}</div>
+        <div><strong>Número de Factura:</strong> {{ invoice.invoiceNumber }}</div>
+        <div><strong>Fecha de Factura:</strong> {{ invoice.invoiceDate | date: "dd/MM/yyyy" }}</div>
+        <div><strong>Proveedor:</strong> {{ invoice.supplier }}</div>
+        <div><strong>Precio Unitario:</strong> {{ invoice.unitPrice }}</div>
+        <div><strong>Cantidad:</strong> {{ invoice.quantity }}</div>
+        <div><strong>Subtotal:</strong> {{ invoice.subtotal }}</div>
+        <div><strong>Impuesto (%):</strong> {{ invoice.tax }}</div>
+        <div><strong>Descuento (%):</strong> {{ invoice.discount }}</div>
+        <div><strong>Total:</strong> {{ invoice.total | number: '1.2-2' }}</div>
+        <div><strong>Creado:</strong> {{ invoice.creationDate | date: "dd/MM/yyyy" }}</div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+
+
+  <!-- Características -->
+  <mat-card class="equipment-info-card">
+    <mat-card-title>Características</mat-card-title>
+    <mat-card-content>
+      <ul>
+        <li *ngFor="let char of equipment.characteristics">
+          <strong>{{ char.componentName }}:</strong> {{ char.description }}
+        </li>
+      </ul>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- En carga -->
+<ng-container *ngIf="loading">
+  <div class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Cargando información del equipo...</p>
+  </div>
+</ng-container>

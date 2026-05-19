@@ -1,0 +1,92 @@
+.top-nav {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  background-color: white;
+ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-button {
+  margin-right: 1rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+.toggle-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.title {
+  font-weight: 600;
+  font-size: 1.25rem;
+  user-select: none;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+button.has-notifications {
+  color: var(--itg-secundary); /* Puedes usar el color que quieras */
+  background-color: var(
+    --itg-primary-bg
+  ); /* rojo suave (warn) con transparencia */
+  border-radius: 0.5rem;
+  transition: background-color 0.3s ease;
+
+  mat-icon {
+    color: var(--itg-secondary);
+  }
+
+  .mat-badge-medium.mat-badge-overlap .mat-badge-content {
+    background-color: var(
+      --itg-secondary
+    ) !important; /* Usa tu color personalizado */
+    color: white; /* Color del texto del badge */
+    font-weight: bold;
+  }
+}
+
+.separator {
+  width: 1px;
+  height: 50%;
+  background-color: #ccc;
+  margin: auto 12px;
+  align-self: stretch;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.greeting {
+  font-weight: 500;
+  color: #333;
+}
+
+.profile-photo {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .separator,
+  .greeting {
+    display: none;
+  }
+
+  .top-nav {
+    padding: 0 0.5rem;
+  }
+
+  .user-info {
+    gap: 4px;
+  }
+
+  .toggle-button {
+    margin-right: 0.5rem;
+  }
+}

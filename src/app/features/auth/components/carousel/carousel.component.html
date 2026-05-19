@@ -1,0 +1,20 @@
+<div class="carousel-container">
+  <!-- Imagen actual sin animaciones complejas -->
+  <img
+    aria-label="carrusel de imágenes"
+    [src]="images[currentIndex]"
+    class="carousel-image"
+    [alt]="'Imagen carrusel ' + (currentIndex + 1)"
+    loading="lazy">
+
+  <!-- Indicadores -->
+  <!-- <div class="carousel-indicators">
+    <button
+      *ngFor="let image of images; let i = index"
+      [class.active]="i === currentIndex"
+      (click)="goToSlide(i)"
+      class="indicator"
+      [attr.aria-label]="'Ir a imagen ' + (i + 1)">
+    </button>
+  </div> -->
+</div>

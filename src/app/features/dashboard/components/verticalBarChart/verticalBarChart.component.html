@@ -1,0 +1,26 @@
+<div class="chart-title">
+  <h2>Equipos/Recursos</h2>
+</div>
+<div class="scrollable-chart">
+  @if (barChartData() || !noData) {
+  <ngx-charts-bar-vertical
+    [results]="barChartData()"
+    [view]="[barWidth, 300]"
+    [legend]="false"
+    [showDataLabel]="true"
+    [showGridLines]="false"
+    [scheme]="'cool'"
+    [xAxis]="true"
+    [yAxis]="true"
+    [showXAxisLabel]="true"
+    [showYAxisLabel]="true"
+    [tooltipDisabled]="true"
+  >
+  </ngx-charts-bar-vertical>
+  } @else {
+  <div class="no-data-placeholder">
+    <img src="assets/No_data.png" alt="No hay datos" />
+    <p>No hay datos disponibles para mostrar</p>
+  </div>
+  }
+</div>

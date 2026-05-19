@@ -1,0 +1,37 @@
+<div class="chart-title">
+  <h2>Estados de equipos</h2>
+  <mat-form-field
+    appearance="outline"
+    style="width: 100%; max-width: 300px; margin-bottom: 16px"
+  >
+    <mat-select
+      [(ngModel)]="selectedCategory"
+      (selectionChange)="onCategoryChange()"
+    >
+      <mat-option *ngFor="let cat of categories()" [value]="cat">
+        {{ cat.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+@if(chartData() && !noData){
+<ngx-charts-pie-chart
+  [results]="chartData()"
+  [legend]="true"
+  [labels]="true"
+  [legendPosition]="legendPosition"
+  [doughnut]="true"
+  [explodeSlices]="false"
+  [scheme]="'cool'"
+  [view]="[400, 200]"
+  [tooltipDisabled]="true"
+>
+</ngx-charts-pie-chart>
+
+} @else{
+<div class="no-data-placeholder">
+  <img src="assets/No_data.png" alt="No hay datos" />
+  <p>No hay datos disponibles para mostrar</p>
+</div>
+}

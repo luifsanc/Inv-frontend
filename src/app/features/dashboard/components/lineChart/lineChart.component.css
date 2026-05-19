@@ -1,0 +1,12 @@
+.chart-title{
+    display: flex;
+    justify-content: space-between;
+    h2{
+        font-size: .8rem;
+        font-weight: bold;
+    }
+}
+
+.chart-container {
+max-width: 100%;
+}

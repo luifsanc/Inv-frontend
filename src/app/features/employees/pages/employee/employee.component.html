@@ -1,0 +1,159 @@
+<div class="section-title">
+  <h3>Empleados</h3>
+  <p>Gestión de empleados del aplicativo</p>
+</div>
+
+<div class="panel-container">
+  <div class="toolbar">
+    <mat-form-field appearance="outline" class="search-input">
+      <input
+        matInput
+        (input)="applyFilter($event)"
+        placeholder="Buscar por nombre, email, etc."
+      />
+      <button mat-icon-button matPrefix (click)="search()" tabindex="-1">
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
+    <span class="spacer"></span>
+
+    <!--
+    <button mat-flat-button (click)="create()">
+      <mat-icon>person_add</mat-icon>
+      Nuevo
+    </button>
+
+    -->
+
+  </div>
+
+  @if(!isSmallScreen){
+  <div class="custom-table-wrapper">
+    <div class="table-scroll-wrapper">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z1" matSort>
+        <!-- Nombre -->
+        <ng-container matColumnDef="employee">
+          <th mat-header-cell *matHeaderCellDef  mat-sort-header>Empleados</th>
+          <td mat-cell *matCellDef="let employee">
+            <strong>{{ employee.firstName }} {{ employee.lastName }}</strong>
+            <p>
+              <span
+                class="status-dot"
+                [ngClass]="employee.status ? 'dot-active' : 'dot-inactive'"
+              ></span>
+              {{ employee.status ? "Activo" : "Inactivo" }}
+            </p>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="phone">
+          <th mat-header-cell *matHeaderCellDef  mat-sort-header>Celular</th>
+          <td mat-cell *matCellDef="let employee">
+            {{ employee.phone }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef  mat-sort-header>Correo electrónico</th>
+          <td mat-cell *matCellDef="let employee">
+            {{ employee.email }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="identification">
+          <th mat-header-cell *matHeaderCellDef  mat-sort-header>Identificación</th>
+          <td mat-cell *matCellDef="let employee">
+            <p>{{ employee.identification }}</p>
+            <p class="text-muted sub-info">{{ employee.identificationType }}</p>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="position">
+          <th mat-header-cell *matHeaderCellDef  mat-sort-header>Cargo</th>
+          <td mat-cell *matCellDef="let employee">
+            {{ employee.position }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="contractDate">
+          <th mat-header-cell *matHeaderCellDef  mat-sort-header>Inicio Contrato</th>
+          <td mat-cell *matCellDef="let employee">
+            {{ employee.contractDate | date : "dd/MM/yyyy" }}
+          </td>
+        </ng-container>
+
+
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </div>
+  }@else {
+  <div class="card-container">
+    <ng-container *ngIf="dataSource.connect() | async as users">
+      <mat-card *ngFor="let employee of users" class="employee-card">
+        <mat-card-title>
+          {{ employee.firstName }} {{ employee.lastName }}
+        </mat-card-title>
+
+        <mat-card-content>
+          <p>
+            <span
+              class="status-dot"
+              [ngClass]="employee.status ? 'dot-active' : 'dot-inactive'"
+            ></span>
+            {{ employee.status ? "Activo" : "Inactivo" }}
+          </p>
+
+          <div class="info-grid">
+            <div>
+              <strong>Celular:</strong> {{ employee.phone || "No disponible" }}
+            </div>
+            <div><strong>Correo:</strong> {{ employee.email }}</div>
+            <div>
+              <strong>Identificación:</strong>
+              {{ employee.identification }} ({{ employee.identificationType }})
+            </div>
+            <div><strong>Posición:</strong> {{ employee.position }}</div>
+            <div>
+              <strong>Inicio contrato:</strong>
+              {{ employee.contractDate | date : "dd/MM/yyyy" }}
+            </div>
+            <div>
+              <strong>Fin contrato:</strong>
+              {{ employee.contractEndDate | date : "dd/MM/yyyy" }}
+            </div>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions align="end">
+          <button mat-icon-button>
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <button mat-icon-button (click)="edit(employee)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            [disabled]="!employee.status"
+            (click)="warningDelete(employee)"
+          >
+            <mat-icon [class.inactive-icon]="!employee.status">delete</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </ng-container>
+  </div>
+
+  }
+
+  <mat-paginator
+    [length]="total"
+    [pageSize]="20"
+    [pageSizeOptions]="[5, 10, 20]"
+    (page)="onPageChange($event)"
+  >
+  </mat-paginator>
+</div>

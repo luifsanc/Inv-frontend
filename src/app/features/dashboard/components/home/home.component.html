@@ -1,0 +1,34 @@
+<div class="section-title">
+  <h3>Dashboard</h3>
+  <p>Bienvenido</p>
+</div>
+
+<div class="panel-container">
+  <div class="card-container">
+    <mat-card
+      class="dashboard-card"
+      *ngFor="let item of cards"
+      [ngStyle]="{ '--bg-color': item.color }"
+    >
+      <mat-card-title>{{ item.title }}</mat-card-title>
+      <mat-card-content>
+        <h2>{{ item.count }}</h2>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="chart-row">
+    <div class="chart-box">
+      @if(barData()){
+      <app-verticalBarChart [data]="barData()" />
+      }
+    </div>
+    <div class="chart-box">
+      <app-pieChart />
+    </div>
+  </div>
+  <div class="chart-row">
+    <div class="chart-box">
+      <app-lineChart />
+    </div>
+  </div>
+</div>

@@ -1,0 +1,80 @@
+<div class="form-wrapper">
+  <div class="form-overlay" *ngIf="isSubmitting || loading">
+    <div class="loading-spinner">
+      <mat-progress-spinner
+        mode="indeterminate"
+        diameter="30"
+      ></mat-progress-spinner>
+      <span style="margin-left: 10px" *ngIf="isSubmitting">Guardando...</span>
+      <span style="margin-left: 10px" *ngIf="loading">Cargando...</span>
+    </div>
+  </div>
+
+  <form [formGroup]="equipmentReturnForm">
+    <!-- Fecha de Devolución -->
+    <div class="form-field">
+      <label
+        >Fecha de devolución</label
+      >
+      <mat-form-field appearance="outline" class="w-100">
+        <input
+          matInput
+          [matDatepicker]="picker"
+          formControlName="dateReturn"
+          placeholder="dd/mm/yyyy"
+          (focus)="picker.open()" readonly
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+      <div class="info-text">
+        <mat-icon class="info-icon-inline">info</mat-icon>
+        Si no se selecciona una fecha, se utilizará la fecha actual.
+      </div>
+
+       <div class="form-field">
+  <label>Condición del equipo</label>
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-select formControlName="condition">
+      <mat-option>
+        <ngx-mat-select-search
+          [formControl]="conditionFilterCtrl"
+          placeholderLabel="Buscar condición..."
+          noEntriesFoundLabel="No se encontraron resultados">
+        </ngx-mat-select-search>
+      </mat-option>
+      <mat-option *ngFor="let condition of filteredConditions" [value]="condition">
+        {{ condition.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div class="info-text">
+    <mat-icon class="info-icon-inline">info</mat-icon>
+    La condición del equipo es opcional al devolverlo.
+  </div>
+</div>
+    </div>
+
+    <!-- Observaciones -->
+     <div class="form-field">
+      <label>Observaciones</label>
+      <mat-form-field appearance="outline" class="w-100">
+        <input matInput formControlName="observations" placeholder="Ingrese observaciones de la devolución" />
+      </mat-form-field>
+      <div class="info-text">
+        <mat-icon class="info-icon-inline">info</mat-icon>
+        Puedes escribir la observación del equipo al devolverlo.
+      </div>
+    </div>
+
+    <!-- Botones -->
+    <div class="itg-button-group">
+      <button mat-flat-button class="itg-cancel-button" (click)="onCancel()">
+        Cancelar
+      </button>
+      <button mat-stroked-button class="itg-primary-button" (click)="onSubmit()">
+        Desasignar
+      </button>
+    </div>
+  </form>
+</div>

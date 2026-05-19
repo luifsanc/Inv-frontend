@@ -1,0 +1,8 @@
+<mat-form-field appearance="fill" class="full-width">
+  <mat-label>Componente</mat-label>
+  <mat-select [formControl]="componentControl">
+    <mat-option *ngFor="let component of components" [value]="component.id">
+      {{ component.description }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>

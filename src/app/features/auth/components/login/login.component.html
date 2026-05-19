@@ -1,0 +1,71 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="loginForm" class="auth-form">
+  <div class="auth-header">
+    <img src="assets/logo.svg" alt="Logo" class="auth-logo" />
+    <h2 class="auth-title">Iniciar sesión</h2>
+  </div>
+  <div class="form-row">
+    <label for="email" class="custom-label">Correo Electrónico</label>
+    <mat-form-field appearance="outline" class="full-width">
+      <input
+        matInput
+        placeholder="email@email.com"
+        formControlName="email"
+        type="email"
+        id="email"
+        required
+      />
+      <mat-icon matSuffix>email</mat-icon>
+      @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+      <mat-error>{{ "Ingresa un correo válido" }}</mat-error>
+      }
+    </mat-form-field>
+  </div>
+  <div class="form-row">
+    <label for="password" class="custom-label">Contraseña</label>
+    <mat-form-field appearance="outline" class="full-width">
+      <input
+        matInput
+        [type]="hidePassword ? 'password' : 'text'"
+        placeholder="Contraseña"
+        formControlName="password"
+        id="password"
+        required
+      />
+      <button
+        type="button"
+        mat-icon-button
+        matSuffix
+        (click)="hidePassword = !hidePassword"
+        [attr.aria-label]="'Mostrar u ocultar contraseña'"
+        [attr.aria-pressed]="!hidePassword"
+      >
+        <mat-icon>{{
+          hidePassword ? "visibility_off" : "visibility"
+        }}</mat-icon>
+      </button>
+      @if (loginForm.get('password')?.invalid &&
+      loginForm.get('password')?.touched) {
+      <mat-error>{{ "La contraseña es requerida" }}</mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <div class="login-options">
+    <mat-checkbox >Recordarme</mat-checkbox>
+    <button
+      type="button"
+      class="forgot-password-btn"
+      (click)="onForgotPassword()"
+    >
+      ¿Olvidaste tu contraseña?
+    </button>
+  </div>
+  <button
+    mat-raised-button
+    type="submit"
+    [disabled]="loginForm.invalid"
+    class="itg-primary-btn"
+  >
+    Iniciar Sesión
+  </button>
+</form>

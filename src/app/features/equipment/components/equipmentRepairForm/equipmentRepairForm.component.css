@@ -1,0 +1,109 @@
+.form-wrapper {
+  position: relative;
+}
+
+.form-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.6); /* blanco traslúcido */
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all; /* bloquea clicks */
+  border-radius: 0.5rem;
+}
+
+.form-overlay .loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centra verticalmente */
+  justify-content: center; /* centra horizontalmente (opcional) */
+  gap: 10px; /* espacio entre spinner y texto */
+  color: #333;
+}
+
+.modal-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-top: 1rem;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+mat-form-field {
+  background-color: white;
+  border-radius: 0.5rem;
+
+  .mat-form-field-flex {
+    border: 1px solid var(--itg-text-muted, #ccc);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    background-color: white;
+  }
+
+  .mat-form-field-appearance-fill .mat-form-field-outline {
+    display: none;
+  }
+}
+
+::ng-deep .description-field .mat-mdc-form-field-infix {
+  height: auto !important;
+  min-height: 3rem !important;
+  display: flex;
+  align-items: start;
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+::ng-deep .description-field textarea {
+  min-height: 3rem;
+  resize: vertical;
+}
+label {
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  color: var(--itg-text-muted, #6c757d);
+  font-size: 0.9rem;
+}
+
+.itg-button-group {
+  display: flex;
+  gap: 12px; /* espacio entre botones */
+}
+
+.itg-primary-button {
+  border-radius: 4px !important; /* menos redondeo que el default */
+  background-color: var(--itg-primary) !important; /* tu color primario */
+  color: white !important; /* texto blanco */
+}
+
+.itg-primary-button:hover {
+  background-color: #004d99 !important; /* tono más oscuro en hover, ajustar */
+}
+
+.itg-cancel-button {
+  border-radius: 4px !important;
+  background-color: #e0e0e0 !important; /* gris claro */
+  color: #333 !important; /* texto oscuro */
+  font-weight: 600;
+}
+
+.itg-cancel-button:hover {
+  background-color: #bdbdbd !important;
+}

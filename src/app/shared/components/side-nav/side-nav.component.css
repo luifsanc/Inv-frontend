@@ -1,0 +1,77 @@
+mat-nav-list {
+  padding-top: 16px;
+}
+
+.title {
+  text-align: center;
+}
+
+.sid-nav-header {
+  text-align: center;
+  margin-bottom: 0.5rem;
+
+  .sid-nav-logo {
+    width: 10rem;
+  }
+
+  .sid-nav-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 0;
+    color: var(--itg-text);
+    text-align: center;
+  }
+}
+
+a {
+  font-weight: 500 !important;
+  color: #333;
+
+  &.active .center-div {
+    color: var(--itg-primary) !important;
+    background-color: var(--itg-bg);
+    font-weight: bold;
+  }
+}
+
+a.mdc-list-item {
+  position: relative; /* para posicionar el pseudo-elemento */
+  padding-left: 16px; /* espacio para el borde, ajusta según necesites */
+  border-left: 4px solid transparent; /* borde invisible por defecto */
+  transition: border-color 0.3s ease;
+}
+
+a.mdc-list-item.active {
+  border-left-color: var(
+    --itg-primary,
+    #1c4d8c
+  ) !important; /* color visible cuando está activo */
+  background-color: #ffffff !important; /* opcional: color de fondo para resaltar */
+  font-weight: 600; /* opcional: texto en negrita */
+}
+
+/* Estilo para los íconos dentro del mat-list-item */
+.side-nav-items mat-icon {
+  font-size: 20px;
+  min-width: 24px;
+}
+
+.center-div {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* Espacio entre el ícono y el texto */
+  padding: 10px 16px;
+  font-weight: 500;
+}
+
+.mat-expansion-panel-header-title, .mat-expansion-panel-header-description{
+  padding: 10px
+}
+
+.menu-label {
+  white-space: normal;      /* permite saltos de línea */
+  word-break: break-word;   /* permite cortar palabras largas si es necesario */
+  display: inline-block;    /* evita que colapse con el ícono */
+  max-width: 140px;         /* ajusta según el ancho de tu sidebar */
+  line-height: 1.2;         /* mejora la lectura si hay varias líneas */
+}

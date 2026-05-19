@@ -1,0 +1,15 @@
+<div *ngIf="warningDialog.isOpen()" class="dialog-overlay">
+  <div class="dialog-content warning">
+    <mat-icon color="warn">warning</mat-icon>
+    <h4>{{ warningDialog.title() }}</h4>
+    <p>{{ warningDialog.message() }}</p>
+    <div class="dialog-actions">
+      <button mat-button color="warn" (click)="confirm()">
+        {{ warningDialog.confirmText() }}
+      </button>
+      <button mat-button (click)="cancel()">
+        {{ warningDialog.cancelText() }}
+      </button>
+    </div>
+  </div>
+</div>

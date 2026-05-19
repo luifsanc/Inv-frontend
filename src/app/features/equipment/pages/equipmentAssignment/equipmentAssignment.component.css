@@ -1,0 +1,95 @@
+.panel-container {
+  padding: 1rem;
+  background-color: white;
+  border-radius: 1rem;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 40px; /* o la altura que tenga tu toolbar */
+  margin-bottom: 2rem;
+}
+
+.toolbar mat-form-field {
+  height: 100%;       /* Ocupa toda la altura del contenedor */
+  margin: 0;          /* Elimina márgenes que alteren la altura */
+  width: 25rem;
+}
+
+.toolbar mat-form-field .mat-form-field-wrapper {
+  height: 100%;       /* Ajusta el wrapper interno */
+  padding-bottom: 0;  /* Evita espacio extra debajo */
+}
+
+.toolbar mat-form-field input.mat-input-element {
+  height: 100%;       /* Input ocupa toda la altura disponible */
+  padding: 0 12px;    /* Ajusta padding para que quede cómodo */
+  box-sizing: border-box;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+
+button.mat-mdc-unelevated-button:not(:disabled) {
+  color: var(--itg-primary); /* color icono de búsqueda */
+  background-color: var(--itg-primary-bg);/* fondo suave para el botón de búsqueda */
+  border: 2px solid  var(--itg-primary);
+  border-radius: .5rem;
+  transition: background-color 0.3s ease;
+}
+
+button.mat-mdc-unelevated-button:not(:disabled):hover {
+  background-color: #2685BF;
+  color: white;
+}
+
+button.mat-flat-button {
+  background-color: var(--itg-secondary-bg);
+  color: white;
+  border-radius: 4px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+::ng-deep mat-form-field.search-input .mat-mdc-form-field-subscript-wrapper {
+  display: none !important;
+}
+
+.mat-mdc-form-field{
+  justify-content: center !important;
+}
+
+::ng-deep .mat-mdc-text-field-wrapper.search-input {
+  flex: none !important;
+}
+
+.one-line-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 20rem;
+  display: inline-block;
+}
+
+.status-container{
+  padding: 3px 5px;
+  border-radius: 1rem;
+}
+
+.active{
+  background-color: var(--status-available-bg);
+  color: var(--status-available);
+  font-weight: bold !important;
+}
+
+.inactive {
+  background-color: var(--status-out-of-service-bg);   /* Rojo claro de fondo */
+  color: var(--status-out-of-service);              /* Rojo fuerte para el texto */
+  font-weight: bold !important;
+}

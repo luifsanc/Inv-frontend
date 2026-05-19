@@ -1,0 +1,128 @@
+<div class="section-title">
+  <h3>Equipos Fuera de Servicio</h3>
+  <p>Gestión de motivos de equipos fuera de servicio</p>
+</div>
+
+<div class="panel-container">
+  <div class="toolbar">
+    <mat-form-field appearance="outline" class="search-input">
+      <input
+        matInput
+        [(ngModel)]="searchTerm"
+        placeholder="Buscar por nombre"
+        (keyup)="applyFilter($event)" [(ngModel)]="searchTerm" placeholder="Buscar por equipos, identificación, etc">
+
+      <button mat-icon-button matPrefix (click)="applyFilter($event)" tabindex="-1">
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
+  @if (!isSmallScreen) {
+  <div class="custom-table-wrapper">
+    <div class="table-scroll-wrapper">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z1">
+        <!-- Equipo -->
+        <ng-container matColumnDef="categoryName">
+          <th mat-header-cell *matHeaderCellDef>Equipo</th>
+          <td mat-cell *matCellDef="let item">
+            <div><strong>{{ item.categoryName }}</strong></div>
+            <div class="text-muted sub-info">{{ item.equipmentBrand}} {{ item.equipmentModel}}</div>
+          </td>
+        </ng-container>
+
+        <!-- Equipo Identificación -->
+        <ng-container matColumnDef="equipmentItemCode">
+         <th mat-header-cell *matHeaderCellDef>
+           Equipo<br />Identificación
+          </th>
+          <td mat-cell *matCellDef="let item">
+         <div>{{ item.equipmentSerialNumber }}</div>
+         <div class="sub-info">{{ item.equipmentItemCode }}</div>
+          </td>
+        </ng-container>
+
+
+        <!-- Tipo de Baja -->
+        <ng-container matColumnDef="dismissalType">
+          <th mat-header-cell *matHeaderCellDef>Tipo de Baja</th>
+          <td mat-cell *matCellDef="let item">
+            {{ item.dismissalTypeName }}
+          </td>
+        </ng-container>
+
+        <!-- razón -->
+        <ng-container matColumnDef="reason">
+          <th mat-header-cell *matHeaderCellDef>Razón</th>
+          <td mat-cell *matCellDef="let item">
+            <p>{{ item.reason }}</p>
+          </td>
+        </ng-container>
+
+
+        <!-- Fecha de baja -->
+        <ng-container matColumnDef="creationDate">
+          <th mat-header-cell *matHeaderCellDef>Fecha de Baja</th>
+          <td mat-cell *matCellDef="let item">
+            {{ item.creationDate | date : "dd/MM/yyyy" }}
+          </td>
+        </ng-container>
+
+        <!-- Empresa -->
+        <ng-container matColumnDef="companyName">
+          <th mat-header-cell *matHeaderCellDef>Oficina</th>
+          <td mat-cell *matCellDef="let item">
+            {{ item.companyName }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </div>
+  } @else {
+  <div class="card-container">
+    <ng-container *ngIf="dataSource.connect() | async as items">
+      <mat-card *ngFor="let item of items" class="equipment-card">
+        <!-- Header personalizado con título y menú -->
+        <div class="card-header">
+          <mat-card-title>{{ item.categoryName }}</mat-card-title>
+          <button mat-icon-button>
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </div>
+
+        <!-- Contenido -->
+        <mat-card-content>
+          <p>
+            <span
+              class="status-dot"
+              [ngClass]="item.status ? 'dot-active' : 'dot-inactive'"
+            ></span>
+            {{ item.status ? "Activo" : "Inactivo" }}
+          </p>
+          <div class="info-grid">
+            <div><strong>Marca:</strong> {{ item.equipmentBrand}}</div>
+            <div><strong>Modelo:</strong> {{ item.equipmentModel }}</div>
+            <div><strong>Serie:</strong> {{ item.equipmentSerialNumber }}</div>
+            <div><strong>Código:</strong> {{ item.equipmentItemCode }}</div>
+            <div><strong>Empresa:</strong> {{ item.companyName }}</div>
+            <div><strong>Stock:</strong> {{ item.categoryName }}</div>
+            <div><strong>Creado:</strong> {{ item.creationDate }}</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
+  </div>
+
+  }
+
+  <mat-paginator
+    [length]="total"
+    [pageSize]="20"
+    [pageSizeOptions]="[5, 10, 20]"
+    (page)="onPageChange($event)"
+  >
+  </mat-paginator>
+</div>

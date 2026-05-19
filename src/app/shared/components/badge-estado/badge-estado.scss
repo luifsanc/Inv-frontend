@@ -1,0 +1,51 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: none;
+  height: 28px;
+  min-width: 104px;
+  border-radius: 999px;
+  padding: 0 12px;
+  border: 1px solid #eaeaea;
+  background: #ffffff;
+  color: #8e8e93;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: visible;
+
+  &::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    margin-right: 8px;
+    border-radius: 999px;
+    background: currentColor;
+  }
+}
+
+.en-progreso {
+  color: #3b82f6;
+  border-color: #dbeafe;
+  background-color: #eff6ff;
+}
+
+.en-espera {
+  color: #f59e0b;
+  border-color: #fef3c7;
+  background-color: #fffbeb;
+}
+
+.completado {
+  color: #10b981;
+  border-color: #d1fae5;
+  background-color: #ecfdf5;
+}
+
+.cancelado {
+  color: #ef4444;
+  border-color: #fee2e2;
+  background-color: #fef2f2;
+}

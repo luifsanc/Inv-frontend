@@ -1,0 +1,280 @@
+<div class="form-wrapper">
+  <div class="form-overlay" *ngIf="isSubmitting || loading">
+    <div class="loading-spinner">
+      <mat-progress-spinner
+        mode="indeterminate"
+        diameter="30"
+      ></mat-progress-spinner>
+      <span style="margin-left: 10px" *ngIf="isSubmitting">Guardando...</span>
+      <span style="margin-left: 10px" *ngIf="loading">Cargando...</span>
+    </div>
+  </div>
+
+  <form [formGroup]="entityForm" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+      <div class="form-field">
+        <label>
+          Nombre <span class="required-asterisk">*</span>
+        </label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input matInput formControlName="firstName" />
+          <mat-error *ngIf="entityForm.get('firstName')?.hasError('required')">
+            El nombre es obligatorio
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-field">
+        <label>
+          Apellido <span class="required-asterisk">*</span>
+        </label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input matInput formControlName="lastName" />
+          <mat-error *ngIf="entityForm.get('lastName')?.hasError('required')">
+            El apellido es obligatorio
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label>
+          Tipo de identificación <span class="required-asterisk">*</span>
+        </label>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-select formControlName="idIdentificationType">
+        <mat-option> 
+            <ngx-mat-select-search
+          [formControl]="identificationTypeFilterCtrl"
+          placeholderLabel="Buscar tipo..."
+          noEntriesFoundLabel="Sin resultados">
+        </ngx-mat-select-search>
+        </mat-option>
+        <mat-option *ngFor="let type of filteredIdentificationTypes" [value]="type.id">
+          {{ type.description }}
+        </mat-option>
+      </mat-select>
+          <mat-error
+            *ngIf="entityForm.get('idIdentificationType')?.hasError('required')"
+          >
+            Seleccione un tipo de identificación
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-field">
+        <label>
+          Identificación <span class="required-asterisk">*</span>
+        </label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input matInput formControlName="identification" />
+          <mat-error
+            *ngIf="entityForm.get('identification')?.hasError('required')"
+          >
+            La identificación es obligatoria
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label>
+          Correo electrónico <span class="required-asterisk">*</span>
+        </label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input matInput formControlName="email" type="email" />
+          <mat-error *ngIf="entityForm.get('email')?.hasError('email')">
+            Debe proporcionar un correo electrónico válido
+          </mat-error>
+          <mat-error *ngIf="entityForm.get('email')?.hasError('required')">
+            El correo electrónico es obligatorio
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-field">
+        <label>
+          Teléfono <span class="required-asterisk">*</span>
+        </label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input matInput formControlName="phone" type="tel" />
+          <mat-error *ngIf="entityForm.get('phone')?.hasError('pattern')">
+            El teléfono debe tener entre 7 y 10 caracteres, y contener solo
+            dígitos, espacios o guiones
+          </mat-error>
+          <mat-error *ngIf="entityForm.get('phone')?.hasError('required')">
+            El teléfono es obligatorio
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label>Dirección</label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input matInput formControlName="address" />
+        </mat-form-field>
+      </div>
+      <div class="form-field">
+        <label>
+          Género <span class="required-asterisk">*</span>
+        </label>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-select formControlName="idGender">
+          <mat-option> 
+            <ngx-mat-select-search
+            [formControl]="genderFilterCtrl"
+            placeholderLabel="Buscar tipo..."
+            noEntriesFoundLabel="Sin resultados">
+          </ngx-mat-select-search>
+          </mat-option>
+          <mat-option *ngFor="let gender of filteredGenders" [value]="gender.id">
+            {{ gender.description }}
+          </mat-option>
+          </mat-select>
+
+          <mat-error *ngIf="entityForm.get('idGender')?.hasError('required')">
+            Seleccione un género
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label>
+          Posición <span class="required-asterisk">*</span>
+        </label>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-select formControlName="idPosition">
+          <mat-option> 
+            <ngx-mat-select-search
+            [formControl]="positionFilterCtrl"
+            placeholderLabel="Buscar tipo..."
+            noEntriesFoundLabel="Sin resultados">
+          </ngx-mat-select-search>
+          </mat-option>
+          <mat-option *ngFor="let position of filteredPositions" [value]="position.id">
+            {{ position.name }}
+          </mat-option>
+          </mat-select>
+
+          <mat-error *ngIf="entityForm.get('idPosition')?.hasError('required')">
+            Seleccione una posición
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-field">
+        <label>
+          Modo de trabajo <span class="required-asterisk">*</span>
+        </label>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-select formControlName="idWorkMode">
+          <mat-option> 
+            <ngx-mat-select-search
+            [formControl]="workModeFilterCtrl"
+            placeholderLabel="Buscar tipo..."
+            noEntriesFoundLabel="Sin resultados">
+          </ngx-mat-select-search>
+          </mat-option>
+          <mat-option *ngFor="let mode of filteredWorkModes" [value]="mode.id">
+            {{ mode.name }}
+          </mat-option>
+          </mat-select>
+          <mat-error *ngIf="entityForm.get('idWorkMode')?.hasError('required')">
+            Seleccione un modo de trabajo
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label>
+          Nacionalidad <span class="required-asterisk">*</span>
+        </label>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-select formControlName="idNationality">
+          <mat-option> 
+            <ngx-mat-select-search
+            [formControl]="nationalityFilterCtrl"
+            placeholderLabel="Buscar tipo..."
+            noEntriesFoundLabel="Sin resultados">
+          </ngx-mat-select-search>
+          </mat-option>
+          <mat-option *ngFor="let nationality of filteredNationalities" [value]="nationality.id">
+            {{ nationality.description }}
+          </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="entityForm.get('idNationality')?.hasError('required')"
+          >
+            Seleccione una nacionalidad
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-field">
+        <label>
+          Fecha de inicio de contrato <span class="required-asterisk">*</span>
+        </label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input
+            matInput
+            [matDatepicker]="picker1"
+            (focus)="picker1.open()"
+            formControlName="contractDate"
+            placeholder="dd/mm/yyyy"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker1"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+          <mat-error *ngIf="entityForm.get('contractDate')?.hasError('required')">
+            La fecha de inicio es obligatoria
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-field">
+        <label>
+          Fecha de fin de contrato
+        </label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input
+            matInput
+            [matDatepicker]="picker2"
+            formControlName="contractEndDate"
+            (focus)="picker2.open()"
+            placeholder="dd/mm/yyyy"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker2"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="itg-button-group">
+      <button mat-flat-button class="itg-cancel-button" (click)="onCancel()">
+        Cancelar
+      </button>
+      <button
+        mat-flat-button
+        color="primary"
+        class="itg-primary-button"
+        type="submit"
+        [disabled]="isSubmitting || entityForm.invalid"
+      >
+        Guardar Empleado
+      </button>
+    </div>
+  </form>
+</div>

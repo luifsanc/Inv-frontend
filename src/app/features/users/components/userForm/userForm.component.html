@@ -1,0 +1,141 @@
+<div class="form-wrapper">
+  <div class="form-overlay" *ngIf="isSubmitting || loading">
+    <div class="loading-spinner">
+      <mat-progress-spinner mode="indeterminate" diameter="30"></mat-progress-spinner>
+      <span style="margin-left: 10px" *ngIf="isSubmitting">Guardando...</span>
+      <span style="margin-left: 10px"  *ngIf="loading">Cargando...</span>
+    </div>
+  </div>
+  <div [formGroup]="userForm">
+    <div class="form-row">
+      <!-- Empleado -->
+      <div class="form-field">
+        <label>Empleado</label>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-select
+            formControlName="employeeId"
+            (selectionChange)="onEmployeeSelected($event.value)">
+          <mat-option>   
+          <ngx-mat-select-search
+              [formControl]="employeeFilterCtrl"
+              placeholderLabel="Buscar empleado"
+              noEntriesFoundLabel="No se encontraron coincidencias">
+            </ngx-mat-select-search>
+          </mat-option>
+
+            <mat-option *ngFor="let emp of filteredEmployees" [value]="emp.id">
+              {{ emp.fullName }} - {{ emp.identification }}
+            </mat-option>
+          </mat-select>
+
+          <mat-error *ngIf="userForm.get('employeeId')?.hasError('required')">
+            El empleado es obligatorio
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Username -->
+      <div class="form-field">
+        <label>Nombre de usuario</label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input matInput formControlName="name" />
+          <mat-error *ngIf="userForm.get('name')?.hasError('required')">
+            El nombre es obligatorio
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <!-- Email -->
+      <div class="form-field">
+        <label>Email</label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input matInput formControlName="email" type="email" />
+          <mat-error *ngIf="userForm.get('email')?.hasError('required')">
+            El email es obligatorio
+          </mat-error>
+          <mat-error *ngIf="userForm.get('email')?.hasError('email')">
+            Ingresa un email válido
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Rol -->
+      <div class="form-field">
+        <label>Rol</label>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-select formControlName="roleIds" multiple>
+            <mat-option> 
+            <ngx-mat-select-search
+              [formControl]="roleFilterCtrl"
+              placeholderLabel="Buscar rol"
+              noEntriesFoundLabel="No se encontraron coincidencias">
+            </ngx-mat-select-search>
+            </mat-option>
+            <mat-option *ngFor="let role of filteredRoles" [value]="role.id">
+              {{ role.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="userForm.get('roleIds')?.hasError('required')">
+            Debe seleccionar al menos un rol
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <!-- Privilegios -->
+      <div class="form-field">
+        <label>Privilegios</label>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-select formControlName="privilegeIds" multiple>
+            <mat-option> 
+            <ngx-mat-select-search
+              [formControl]="privilegeFilterCtrl"
+              placeholderLabel="Buscar privilegio"
+              noEntriesFoundLabel="No se encontraron coincidencias">
+            </ngx-mat-select-search>
+            </mat-option>
+            <mat-option *ngFor="let p of filteredPrivileges" [value]="p.id">
+              {{ p.key }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Menús -->
+      <div class="form-field">
+        <label>Menús</label>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-select formControlName="menuIds" multiple>
+            <mat-option> 
+            <ngx-mat-select-search
+              [formControl]="menuFilterCtrl"
+              placeholderLabel="Buscar menú"
+              noEntriesFoundLabel="No se encontraron coincidencias">
+            </ngx-mat-select-search>
+            </mat-option>
+            <mat-option *ngFor="let m of filteredMenus" [value]="m.id">
+              {{ m.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="itg-button-group">
+      <button mat-flat-button class="itg-cancel-button" (click)="onCancel()">
+        Cancelar
+      </button>
+      <button
+        mat-flat-button
+        class="itg-primary-button"
+        (click)="onSubmit()"
+        [disabled]="isSubmitting"
+      >
+        {{userId!= 0 ? "Actualizar": "Crear" }}
+      </button>
+    </div>
+  </div>
+</div>

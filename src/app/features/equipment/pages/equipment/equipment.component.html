@@ -1,0 +1,277 @@
+<div class="section-title">
+  <h3>Equipos</h3>
+  <p>Gestión de equipos del aplicativo</p>
+</div>
+
+<div class="panel-container">
+  <div class="toolbar">
+    <mat-form-field appearance="outline" class="search-input">
+      <input
+        matInput
+        [(ngModel)]="searchTerm"
+        placeholder="Buscar por nombre"
+        (keyup)="search()"
+      />
+      <button mat-icon-button matPrefix (click)="search()" tabindex="-1">
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
+    <span class="spacer"></span>
+    <button mat-flat-button (click)="downloadExcel()">
+      <mat-icon>download</mat-icon>
+      EXCEL
+    </button>
+
+    <button mat-flat-button (click)="create()">
+      <mat-icon>add</mat-icon>
+      Nuevo
+    </button>
+  </div>
+
+  @if (!isSmallScreen) {
+  <div class="custom-table-wrapper">
+    <div class="table-scroll-wrapper">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z1">
+        <!-- Nombre -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Equipo</th>
+          <td mat-cell *matCellDef="let item">
+            <strong>{{ item.categoryName }}</strong>
+            <div class="text-muted sub-info">{{ item.brand }} {{ item.model }}</div>
+            <div>
+              <span >
+                Stock {{ item.categoryStock }}
+              </span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Estado -->
+        <ng-container matColumnDef="estado">
+          <th mat-header-cell *matHeaderCellDef class="text-center">
+            <div class="header-with-filter">
+              <th>Estado</th>
+              <button class="excel-filter-btn" [matMenuTriggerFor]="estadoMenu">
+                <mat-icon>arrow_drop_down</mat-icon>
+              </button>
+            </div>
+
+            <!-- Menú del filtro -->
+            <mat-menu #estadoMenu="matMenu">
+              <button mat-menu-item (click)="applyFilters('', 'estado')">Todos</button>
+              <button mat-menu-item *ngFor="let estado of selectedStatus"
+                (click)="applyFilters(estado, 'estado')">
+                {{ estado }}
+              </button>
+            </mat-menu>
+          </th>
+          <td mat-cell *matCellDef="let item" class="text-center">
+            <span class="status-container" [ngClass]="getStatusClasses(item.equipmentStatusName)">
+              <span class="status-dot"></span>
+              {{ item.equipmentStatusName }}
+            </span>
+          </td>
+        </ng-container>
+
+
+         <!-- Condicion -->
+        <ng-container matColumnDef="condicion">
+         <th mat-header-cell *matHeaderCellDef class="text-center">
+          <div class="header-with-filter">
+            <th>Condición</th>
+            <button class="excel-filter-btn" [matMenuTriggerFor]="condicionMenu">
+              <mat-icon>arrow_drop_down</mat-icon>
+            </button>
+          </div>
+
+          <mat-menu #condicionMenu="matMenu">
+            <button mat-menu-item (click)="applyFilters('', 'condicion')">Todas</button>
+            <button mat-menu-item *ngFor="let cond of selectedCondition"
+              (click)="applyFilters(cond, 'condicion')">
+              {{ cond }}
+            </button>
+          </mat-menu>
+         </th>
+          <td mat-cell *matCellDef="let item" class="text-center">
+            <span class="status-container" [ngClass]="getConditions(item.equipmentConditionName)">
+              <span class="status-dot"></span>
+              {{ item.equipmentConditionName }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Stock
+        <ng-container matColumnDef="stock">
+          <th mat-header-cell *matHeaderCellDef>Categoría Stock</th>
+          <td mat-cell *matCellDef="let item">
+            {{ item.categoryStock }}
+          </td>
+        </ng-container>-->
+
+        <!-- Fecha de Compra -->
+        <ng-container matColumnDef="buyDate">
+          <th mat-header-cell *matHeaderCellDef>Creado</th>
+          <td mat-cell *matCellDef="let item">
+            {{ item.creationDate | date : "dd/MM/yyyy" }}
+          </td>
+        </ng-container>
+
+        <!-- Factura -->
+        <ng-container matColumnDef="invoice">
+          <th mat-header-cell *matHeaderCellDef>Factura Id</th>
+          <td mat-cell *matCellDef="let item">
+            {{ item.invoice || "No asignada" }}
+          </td>
+        </ng-container>
+
+        <!-- Ubicación -->
+        <ng-container matColumnDef="office">
+          <th mat-header-cell *matHeaderCellDef>Oficina</th>
+          <td mat-cell *matCellDef="let item">
+            {{ item.companyName }}
+          </td>
+        </ng-container>
+
+        <!-- Detalle -->
+        <ng-container matColumnDef="identificacion_equipo">
+          <th mat-header-cell *matHeaderCellDef>Equipo Identificación</th>
+          <td mat-cell *matCellDef="let item">
+            <p>{{ item.serialNumber }}</p>
+            <p class="text-muted sub-info">{{ item.itemCode }}</p>
+          </td>
+        </ng-container>
+
+        <!-- Acciones -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let item" class="actions-cell">
+            <button
+              mat-icon-button
+              [matMenuTriggerFor]="menu"
+              aria-label="Opciones"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="view(item)">
+                <mat-icon>visibility</mat-icon>
+                <span>Ver</span>
+              </button>
+              <button
+                mat-menu-item
+                (click)="edit(item)"
+                [disabled]="!item.status">
+                <mat-icon>edit</mat-icon>
+                <span>Editar</span>
+              </button>
+              <button
+                mat-menu-item
+                (click)="warningDelete(item)"
+                [disabled]="!item.status"
+              >
+                <mat-icon [class.inactive-icon]="!item.status">delete</mat-icon>
+                <span>Eliminar</span>
+              </button>
+              <button
+                mat-menu-item
+                (click)="sendToRepair(item)"
+                [disabled]="!item.status || (item.equipmentStatusId !== 1 && item.equipmentStatusId !== 2)"
+              >
+                <mat-icon>build</mat-icon>
+                <span>Enviar a reparación</span>
+              </button>
+
+              <button
+                mat-menu-item
+                (click)="openDismissalFormAndThenSetStatus(item)"
+                [disabled]="item.equipmentStatusId === 7 || !item.status">
+                <mat-icon>highlight_off</mat-icon>
+                <span>Fuera de servicio</span>
+              </button>
+
+            </mat-menu>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns" [ngClass]="{ 'row-deleted': !row.status }"></tr>
+      </table>
+    </div>
+  </div>
+  } @else {
+  <div class="card-container">
+    <ng-container *ngIf="dataSource.connect() | async as items">
+      <mat-card *ngFor="let item of items" class="equipment-card">
+        <!-- Header personalizado con título y menú -->
+        <div class="card-header">
+          <mat-card-title>{{ item.categoryName }}</mat-card-title>
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </div>
+
+        <!-- Contenido -->
+        <mat-card-content>
+          <p>
+            <span
+              class="status-dot"
+              [ngClass]="item.status ? 'dot-active' : 'dot-inactive'"
+            ></span>
+            {{ item.status ? "Activo" : "Inactivo" }}
+          </p>
+          <div class="info-grid">
+            <div><strong>Marca:</strong> {{ item.brand }}</div>
+            <div><strong>Modelo:</strong> {{ item.model }}</div>
+            <div><strong>Serie:</strong> {{ item.serialNumber }}</div>
+            <div><strong>Código:</strong> {{ item.itemCode }}</div>
+            <div><strong>Empresa:</strong> {{ item.companyName }}</div>
+            <div><strong>Stock:</strong> {{ item.categoryStock }}</div>
+            <div>
+              <strong>Factura:</strong> {{ item.invoice || "No asignada" }}
+            </div>
+            <div><strong>Creado:</strong> {{ item.creationDate }}</div>
+          </div>
+        </mat-card-content>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item>
+            <mat-icon>visibility</mat-icon>
+            <span>Ver</span>
+          </button>
+          <button mat-menu-item (click)="edit(item)" [disabled]="!item.status">
+            <mat-icon>edit</mat-icon>
+            <span>Editar</span>
+          </button>
+          <button
+            mat-menu-item
+            (click)="sendToRepair(item)"
+            [disabled]="!item.status"
+          >
+            <mat-icon>build</mat-icon>
+            <span>Enviar a reparación</span>
+          </button>
+          <button
+            mat-menu-item
+            (click)="warningDelete(item)"
+            [disabled]="!item.status"
+          >
+            <mat-icon class="inactive-icon">delete</mat-icon>
+            <span>Eliminar</span>
+          </button>
+        </mat-menu>
+      </mat-card>
+
+      <!-- Menú contextual para las acciones -->
+    </ng-container>
+  </div>
+
+  }
+
+  <mat-paginator
+    [length]="total"
+    [pageSize]="20"
+    [pageSizeOptions]="[5, 10, 20]"
+    (page)="onPageChange($event)"
+  >
+  </mat-paginator>
+</div>

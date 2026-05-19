@@ -1,0 +1,267 @@
+<div class="form-wrapper">
+  <div class="form-overlay" *ngIf="isSubmitting || loading">
+    <div class="loading-spinner">
+      <mat-progress-spinner
+        mode="indeterminate"
+        diameter="30"
+      ></mat-progress-spinner>
+      <span style="margin-left: 10px" *ngIf="isSubmitting">Guardando...</span>
+      <span style="margin-left: 10px" *ngIf="loading">Cargando...</span>
+    </div>
+  </div>
+
+  <form [formGroup]="equipmentForm">
+    <div class="form-row">
+      <!-- Condición -->
+      <div class="form-field">
+        <label
+          >Condición del equipo <span class="required-asterisk">*</span></label
+        >
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-select formControlName="condition" required>
+        <mat-option>
+            <ngx-mat-select-search
+          [formControl]="conditionFilterCtrl"
+          placeholderLabel="Buscar condición..."
+          noEntriesFoundLabel="No se encontraron resultados">
+        </ngx-mat-select-search>
+        </mat-option>
+        <mat-option *ngFor="let condition of filteredConditions" [value]="condition.id">
+          {{ condition.name }}
+        </mat-option>
+      </mat-select>
+
+          <mat-error
+            *ngIf="equipmentForm.get('condition')?.hasError('required')"
+          >
+            La condición es obligatoria
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Empresa -->
+      <div class="form-field">
+        <label>Empresa <span class="required-asterisk">*</span></label>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-select formControlName="company" required>
+        <mat-option>
+            <ngx-mat-select-search
+          [formControl]="companyFilterCtrl"
+          placeholderLabel="Buscar empresa..."
+          noEntriesFoundLabel="No se encontraron empresas">
+        </ngx-mat-select-search>
+        </mat-option>
+        <mat-option *ngFor="let company of filteredCompanies" [value]="company.id">
+          {{ company.name }}
+        </mat-option>
+      </mat-select>
+
+          <mat-error *ngIf="equipmentForm.get('company')?.hasError('required')">
+            La empresa es obligatoria
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Toggle Nueva Categoría -->
+    <div class="form-row">
+      <div class="form-field">
+        <mat-slide-toggle
+          formControlName="isCreatingNewCategory"
+          color="primary"
+        >
+          Nueva Categoría
+        </mat-slide-toggle>
+      </div>
+    </div>
+
+    <!-- Categoría -->
+    <div class="form-row">
+      <div
+        class="form-field"
+        *ngIf="
+          equipmentForm.get('isCreatingNewCategory')?.value;
+          else selectCategory
+        "
+      >
+        <label
+          >Nombre de la nueva categoría
+          <span class="required-asterisk">*</span></label
+        >
+        <mat-form-field appearance="outline" class="w-100">
+          <input matInput formControlName="categoryName"
+          (input)="toUpperCaseField('categoryName')" />
+          <mat-error
+            *ngIf="equipmentForm.get('categoryName')?.hasError('required')"
+          >
+            El nombre de la categoría es obligatorio
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <ng-template #selectCategory>
+        <div class="form-field">
+          <label
+            >Selecciona una categoría
+            <span class="required-asterisk">*</span></label
+          >
+
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-select formControlName="categoryId">
+              <mat-option>
+              <ngx-mat-select-search
+              [formControl]="categoryFilterCtrl"
+              placeholderLabel="Buscar categoría..."
+              noEntriesFoundLabel="No se encontraron categorías">
+            </ngx-mat-select-search>
+            </mat-option>
+            <mat-option *ngFor="let category of filteredCategories" [value]="category.id">
+              {{ category.name }}
+            </mat-option>
+          </mat-select>
+
+            <mat-error
+              *ngIf="equipmentForm.get('categoryId')?.hasError('required')"
+            >
+              La categoria es obligatoria
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Datos del equipo -->
+    <div class="form-row">
+      <div class="form-field">
+        <label>Marca <span class="required-asterisk">*</span></label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input matInput formControlName="brand"
+          (input)="toUpperCaseField('brand')" />
+          <mat-error
+            *ngIf="equipmentForm.get('brand')?.hasError('required')">
+            El nombre de la marca es obligatorio
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-field">
+        <label>Modelo <span class="required-asterisk">*</span></label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input matInput formControlName="model"
+          (input)="toUpperCaseField('model')" />
+          <mat-error *ngIf="equipmentForm.get('model')?.hasError('required') && equipmentForm.get('model')?.touched">
+            El nombre del modelo es obligatorio
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label>Número de serie <span class="required-asterisk">*</span></label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input matInput formControlName="serialNumber" />
+          <mat-error
+            *ngIf="equipmentForm.get('serialNumber')?.hasError('required')"
+          >
+            El número de serie es obligatorio
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-field">
+        <label>Código del ítem <span class="required-asterisk">*</span></label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input matInput formControlName="itemCode" />
+          <mat-error
+            *ngIf="equipmentForm.get('serialNumber')?.hasError('required')"
+          >
+            El código del ítem es obligatorio
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Características dinámicas -->
+    <div formArrayName="equipmentCharacteristics">
+      <div
+        class="form-row form-row-characteristics"
+        *ngFor="let characteristic of characteristics.controls; let i = index"
+        [formGroupName]="i"
+      >
+        <div class="form-field">
+          <label>Componente <span class="required-asterisk">*</span></label>
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-select formControlName="component" required
+            (selectionChange)="onComponentSelect($event, i)">
+            <mat-option>
+              <ngx-mat-select-search
+                [formControl]="componentFilterCtrl"
+                placeholderLabel="Buscar componente..."
+                noEntriesFoundLabel="No se encontraron componentes"
+              ></ngx-mat-select-search>
+              </mat-option>
+              
+              <mat-option
+                *ngFor="let comp of filteredComponents"
+                [value]="comp.id"
+              >
+                {{ comp.description }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="equipmentForm.get('component')?.hasError('required') &&
+              characteristics.controls[i].get('component')?.touched"
+            >
+              El componente es obligatorio
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <label>Descripción <span class="required-asterisk">*</span></label>
+          <mat-form-field appearance="outline" class="w-100">
+            <input matInput formControlName="description" />
+              <mat-error
+              *ngIf="equipmentForm.get('description')?.hasError('required')"
+            >
+              El número de serie es obligatorio
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field delete-button">
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="removeCharacteristic(i)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <button
+        mat-stroked-button
+        color="primary"
+        (click)="addCharacteristic()"
+        type="button"
+      >
+        <mat-icon>add</mat-icon> Agregar característica
+      </button>
+    </div>
+
+    <!-- Botones -->
+    <div class="itg-button-group">
+      <button mat-flat-button class="itg-cancel-button" (click)="onCancel()">
+        Cancelar
+      </button>
+      <button
+        mat-flat-button
+        class="itg-primary-button"
+        (click)="onSubmit()"
+        [disabled]="isSubmitting || equipmentForm.invalid"
+      >
+        {{ entityId != 0 ? "Actualizar equipo" : " Crear equipo" }}
+      </button>
+    </div>
+  </form>
+</div>
